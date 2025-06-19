@@ -40,3 +40,35 @@
 .read-the-docs {
   color: #888;
 }
+a{
+  font-weight: 500;
+  color: #CBD2E2;
+  text-decoration: inherit;
+  padding: 10
+}
+a:hover{
+  font-weight: 500;
+  color: #E4CCC9;
+  text-decoration: inherit;
+  padding: 10
+}
+h1{
+  color: #D1D2C6
+}
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  z-index: 1000;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+main {
+  margin-top: 60px;
+}
