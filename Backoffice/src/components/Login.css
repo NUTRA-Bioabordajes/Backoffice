@@ -1,0 +1,82 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display:flex;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .contenedor-autenticacion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;  
+    width: 100vw;
+    background: url('src\assets\images\fondo.jpg') no-repeat center center;
+    background-size: cover;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .logo {
+    width: 150px;
+    margin-bottom: 20px;
+  }
+  
+  .caja-autenticacion {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 12px;
+    width: 70%;         
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .caja-autenticacion h2 {
+    margin-bottom: 20px;
+    color:black;
+  }
+  
+  .caja-autenticacion label {
+    display: block;
+    margin: 10px 0 5px;
+    color:#666666;
+  }
+  
+  .caja-autenticacion input {
+    width: 99%;
+    padding: 10px;
+    background-color: #ddd;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    color:#666666;
+
+  }
+  
+  .boton-autenticacion {
+    width: fit-content;
+    padding: 10px 20px;
+    color:rgba(255, 255, 255, 0.9);
+    background-color: #CBD2E2;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: not-allowed;
+    margin: 0 auto; 
+    display: block;
+  }
+  
+  .enlace-autenticacion {
+    margin-top: 15px;
+    text-align: center;
+  }
+  
+  .enlace-autenticacion a {
+    color: #CBD2E2;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
