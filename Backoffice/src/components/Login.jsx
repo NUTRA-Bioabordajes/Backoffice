@@ -13,7 +13,7 @@ export default function Login() {
     setError(''); // limpia errores previos
 
     try {
-      const res = await fetch('http://actively-close-beagle.ngrok-free.app/login', {
+      /*const res = await fetch('http://actively-close-beagle.ngrok-free.app/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ export default function Login() {
         throw new Error('Error: usuario y/o contraseña incorrecto');
       }
 
-      localStorage.setItem('token', data.token);
+      localStorage.setItem('token', data.token);*/
       navigate('/dashboard/home');
 
     } catch (err) {

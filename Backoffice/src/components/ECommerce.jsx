@@ -1,16 +1,15 @@
 import {Link} from "react-router-dom"
-import Text from 'react'
 import React from "react";
 
-const VerPaciente = () => {
+const Ecommerce = () => {
 
     return(
     <>
         
-        <h1>Ver Paciente</h1>
+        <h1>ECOMMERCE</h1>
     </>
 
     )
         
 }
-export default VerPaciente;
+export default Ecommerce;

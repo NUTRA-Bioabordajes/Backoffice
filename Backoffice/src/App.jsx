@@ -4,8 +4,10 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Layout from './components/Layout';
 import Home from './components/Home';
-import VerPaciente from './components/VerPaciente';
-import VerReceta from './components/VerReceta';
+import Pacientes from './components/Pacientes';
+import Recetas from './components/Recetas';
+import ECommerce from './components/ECommerce';
+import AgregarPaciente from './components/AgregarPaciente';
 
 function App() {
   return (
@@ -19,8 +21,11 @@ function App() {
         {/* Rutas privadas */}
         <Route path="/dashboard" element={<Layout />}>
           <Route path="home" element={<Home />} />
-          <Route path="ver-paciente" element={<VerPaciente />} />
-          <Route path="ver-receta" element={<VerReceta />} />
+          <Route path="pacientes" element={<Pacientes />} />
+          <Route path="recetas" element={<Recetas />} />
+          <Route path="ecommerce" element={<ECommerce />} />
+          <Route path="agregarPaciente" element={<AgregarPaciente />} />
+
         </Route>
 
         {/* Página por defecto si no coincide ninguna */}

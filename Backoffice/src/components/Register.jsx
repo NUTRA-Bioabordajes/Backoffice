@@ -8,14 +8,23 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const passwordsMatch = password === confirmPassword && password !== '';
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!passwordsMatch || !username) return;
-
-    // Lógica de registro (API, localStorage, etc.)
-    navigate('/home');
+  
+    try {
+      // Aquí podrías llamar a tu API de registro si ya la tienes
+      // Ejemplo:
+      // const res = await fetch('http://tu-api/register', { ... });
+      // const data = await res.json();
+      // localStorage.setItem('token', data.token);
+  
+      // Por ahora, navega directo a home
+      navigate('/dashboard/home');
+    } catch (err) {
+      console.error('Error registrando:', err);
+    }
   };
-
   return (
     <div className="contenedor-autenticacion">
       <img src="/src/assets/images/logo.png" alt="Nutra logo" className="logo" />

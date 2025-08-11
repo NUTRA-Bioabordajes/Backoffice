@@ -1,0 +1,13 @@
+.agregar-paciente-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: #000000;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.agregar-paciente-link:hover {
+    text-decoration: underline;
+    color: #CBD2E2;
+}

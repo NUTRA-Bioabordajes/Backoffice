@@ -1,0 +1,115 @@
+
+body {
+    background-color: #f8f3ea;
+    font-family: Arial, sans-serif;
+    padding-top: 40px;
+    margin: 0;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .formulario {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #fffaf3;
+    border-radius: 10px;
+  }
+  
+  .campo {
+    margin-bottom: 1.5rem;
+  }
+  
+  .campo label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.4rem;
+    color: #444;
+  }
+  
+  .input,
+  .select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #c3b3ff; 
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease;
+    background-color: white;
+    color: #000; 
+  }
+  
+  .input::placeholder,
+  .select {
+    color: #999;
+  }
+  
+  .input:focus,
+  .select:focus {
+    border-color: #8b5cf6;
+    color: #000; 
+  }
+  
+  .input.error {
+    border-color: #f87171;
+  }
+  
+  .campo .error-message {
+    color: #f87171;
+    font-size: 12px;
+    margin-top: 0.3rem;
+  }
+  
+  .persona-cargo {
+    margin-bottom: 2.5rem; 
+  }
+  
+  .persona-cargo h3 {
+    font-size: 15px;
+    margin-bottom: 0.8rem; 
+    color: #444;
+  }
+  
+  .persona-cargo .input {
+    margin-bottom: 0.8rem; 
+  }
+  
+ 
+  .boton-enviar {
+    display: block;
+    width: 100%;
+    background-color: #a78bfa; 
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .boton-enviar:hover {
+    background-color: #8b5cf6; 
+  }
+  
+  .boton-enviar:disabled {
+    background-color: #d1c4f7;
+    cursor: not-allowed;
+  }
+  
+  .form-container {
+    max-width: 600px;
+    height: 90vh;
+    width: 600px;; 
+    overflow-y: auto;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);  
+  }
+  
