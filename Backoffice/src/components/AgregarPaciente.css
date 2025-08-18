@@ -10,7 +10,7 @@ body {
   }
   
   .formulario {
-    max-width: 600px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 2rem;
     background-color: #fffaf3;
@@ -66,8 +66,8 @@ body {
     margin-bottom: 2.5rem; 
   }
   
-  .persona-cargo h3 {
-    font-size: 15px;
+  h3 {
+    font-size: 25px;
     margin-bottom: 0.8rem; 
     color: #444;
   }
@@ -102,9 +102,9 @@ body {
   }
   
   .form-container {
-    max-width: 600px;
+    max-width: 1000px;
     height: 90vh;
-    width: 600px;; 
+    width: 1000px;; 
     overflow-y: auto;
     margin: 0 auto;
     background-color: #fff;
@@ -112,4 +112,5 @@ body {
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);  
   }
+  
   
