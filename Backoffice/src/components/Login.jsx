@@ -4,38 +4,6 @@ import axios from "axios";
 import './Login.css';
 
 
-/*export default function Login() {
-  const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
-  const handleLogin = async () => {
-    setError(''); // limpia errores previos
-
-    try {
-      /*const res = await fetch('http://actively-close-beagle.ngrok-free.app/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await res.json();
-
-      // Si la API devuelve error o status no OK, lanzamos nuestro mensaje fijo
-      if (!res.ok) {
-        throw new Error('Error: usuario y/o contraseña incorrecto');
-      }
-
-      localStorage.setItem('token', data.token);
-      navigate('/dashboard/home');
-
-    } catch (err) {
-      setError(err.message || 'Error: usuario y/o contraseña incorrecto');
-    }
-  };*/
   const LogIn = () => {
     const [form, setForm] = useState({
       username: "",
@@ -102,7 +70,7 @@ import './Login.css';
 
       setSuccess(true);
       setTimeout(() => {
-        navigate("/home");
+        navigate("/dashboard/Home");
       }, 200);
 
     } catch (err) {

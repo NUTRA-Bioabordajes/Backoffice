@@ -1,38 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import './AgregarPaciente.css';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const AgregarPaciente = () => {
   // States para inputs
   const [formData, setFormData] = useState({
-    nombreApellido: "",
-    dniCuil: "",
+    nombre: "",
+    apellido: "",
+    dni: "",
     edad: "",
     diagnostico: "",
-    medicoTratante: "",
-    estudioLaboratorio: null,
-    alergiasIgE: "",
-    intoleranciasIgG: "",
+    idMedicoTratante: "",
+    intolerancia: "",
     sexo: "",
     barrio: "",
     nombrePersonaACargo1: "",
+    apellidoPersonaACargo1: "",
     dniPersonaACargo1: "",
     emailPersonaACargo1: "",
     telefonoPersonaACargo1: "",
     nombrePersonaACargo2: "",
+    apellidoPersonaACargo2: "",
     dniPersonaACargo2: "",
     emailPersonaACargo2: "",
     telefonoPersonaACargo2: "",
+    foto: ""
   });
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [file, setFile] = useState(null);
+  //const [dropdownOpen, setDropdownOpen] = useState(false);
+  //const [file, setFile] = useState(null);
   const [errors, setErrors] = useState({});
+  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
   // Estados para intolerancias
-  const [intoleranciasDisponibles, setIntoleranciasDisponibles] = useState([]);
-  const [intoleranciasSeleccionadas, setIntoleranciasSeleccionadas] = useState([]);
-  const [search, setSearch] = useState("");
+ // const [intoleranciasDisponibles, setIntoleranciasDisponibles] = useState([]);
+  //const [intoleranciasSeleccionadas, setIntoleranciasSeleccionadas] = useState([]);
+  //const [search, setSearch] = useState("");
 
-  useEffect(() => {
+  /*useEffect(() => {
     fetch("https://actively-close-beagle.ngrok-free.app/intolerancias")
       .then(res => {
         if (!res.ok) throw new Error(`Error status: ${res.status}`);
@@ -40,10 +46,10 @@ const AgregarPaciente = () => {
       })
       .then(data => {
         console.log("Data API intolerancias:", data);
-        setIntoleranciasDisponibles(data); 
+        //setIntoleranciasDisponibles(data); 
       })
       .catch(err => console.error("Error cargando intolerancias:", err));
-  }, []);
+  }, []);*/
   
   
 
@@ -52,48 +58,74 @@ const AgregarPaciente = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
+  /*const handleFileChange = (e) => {
     setFile(e.target.files[0]);
     setFormData(prev => ({ ...prev, estudioLaboratorio: e.target.files[0] || null }));
-  };
+  };*/
 
-  const handleIntoleranciaSelect = (intolerancia) => {
+  /*const handleIntoleranciaSelect = (intolerancia) => {
     if (!intoleranciasSeleccionadas.includes(intolerancia)) {
       setIntoleranciasSeleccionadas(prev => [...prev, intolerancia]);
     }
-  };
+  };*/
 
-  const handleIntoleranciaRemove = (intolerancia) => {
+ /* const handleIntoleranciaRemove = (intolerancia) => {
     setIntoleranciasSeleccionadas(prev => prev.filter(i => i !== intolerancia));
-  };
+  };*/
 
   const validate = () => {
     const newErrors = {};
     if (!formData.edad || isNaN(formData.edad) || formData.edad <= 0) {
       newErrors.edad = "Edad debe ser un número positivo";
     }
-    if (!formData.medicoTratante) newErrors.medicoTratante = "Campo obligatorio";
+    if (!formData.idMedicoTratante) newErrors.idMedicoTratante = "Campo obligatorio";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    if (!validate()) return;
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      setSuccess(false);
+      return;
+    }
+    setErrors({});
+    setSuccess(false);
 
-    const envioFinal = {
-      ...formData,
-      intoleranciasSeleccionadas
-    };
+    const url = new URL (`http://localhost:3000/usuarios/nuevoUsuario`)
 
-    console.log("Enviar datos paciente:", envioFinal);
-    alert("Datos enviados con éxito (ver consola).");
+    try {
+      console.log("url", url)
+      await axios.post(
+        url.toString(),
+        {
+          ...formData,
+
+        },
+      );
+
+      setSuccess(true);
+      setTimeout(() => {
+        navigate("/dashboard/pacientes");
+      }, 600);
+    } catch (err) {
+      setErrors({
+        ...errors,
+        name:
+          err.response?.data?.message ||
+          "No se pudo crear el usuario. Intenta de nuevo.",
+      });
+      setSuccess(false);
+    }
   };
+  
 
   // Filtrado para búsqueda
-  const filteredIntolerancias = intoleranciasDisponibles.filter(i =>
+  /*const filteredIntolerancias = intoleranciasDisponibles.filter(i =>
     i.nombre.toLowerCase().includes(search.toLowerCase())
-  );
+  );*/
   
 
   return (
@@ -103,13 +135,21 @@ const AgregarPaciente = () => {
           <h3>DATOS DEL PACIENTE</h3>
 
           <div className="campo">
-            <label htmlFor="nombreApellido">Nombre y Apellido</label>
-            <input type="text" id="nombreApellido" name="nombreApellido" className="input" placeholder="Nombre y Apellido" value={formData.nombreApellido} onChange={handleChange}
+            <label htmlFor="nombreApellido">Nombre</label>
+            <input type="text" id="nombreApellido" name="nombre" className="input" placeholder="Nombre" value={formData.nombre} onChange={handleChange}
             />
+           
           </div>
 
           <div className="campo">
-            <label htmlFor="dniCuil">DNI / CUIL</label><input  type="text"  id="dniCuil"  name="dniCuil"  className="input"  placeholder="DNI o CUIL"  value={formData.dniCuil}  onChange={handleChange}/>
+            <label htmlFor="nombreApellido">Apellido</label>
+            <input type="text" id="nombreApellido" name="apellido" className="input" placeholder="Apellido" value={formData.apellido} onChange={handleChange}
+            />
+            
+          </div>
+
+          <div className="campo">
+            <label htmlFor="dniCuil">DNI</label><input  type="text"  id="dni"  name="dni"  className="input"  placeholder="DNI o CUIL"  value={formData.dni}  onChange={handleChange}/>
           </div>
 
           <div className="campo">
@@ -126,20 +166,25 @@ const AgregarPaciente = () => {
           </div>
 
           <div className="campo">
-            <label htmlFor="medicoTratante">Médico tratante</label>
-            <input type="text" id="medicoTratante" name="medicoTratante" className="input" placeholder="Médico tratante" value={formData.medicoTratante} onChange={handleChange}
+            <label htmlFor="idMedicoTratante"> ID Médico tratante</label>
+            <input type="number" id="idMedicoTratante" name="idMedicoTratante" className="input" placeholder="Médico tratante" value={formData.idMedicoTratante} onChange={handleChange}
             />
-            {errors.medicoTratante && <p className="error">{errors.medicoTratante}</p>}
+            {errors.idMedicoTratante && <p className="error">{errors.idMedicoTratante}</p>}
           </div>
           <div className="campo">
 
 
-          <label htmlFor="intolerancias">Intolerancias</label>
-          <input type="text" placeholder="Buscar intolerancia..." value={search} onChange={e => setSearch(e.target.value)} className="input" onFocus={() => setDropdownOpen(true)} onBlur={() => setTimeout(() => setDropdownOpen(false), 150)} // pequeño delay para click
+          <label htmlFor="intolerancias">Intolerancia</label>
+          <input type="number" id="intolerancia" name="intolerancia" placeholder="Buscar intolerancia..." value={formData.intolerancia} onChange={handleChange} className="input"
           />
 
+          <div className="campo">
+            <label htmlFor="foto">Foto</label>
+            <input type="text" id="foto" name="foto" className="input" placeholder="Foto" value={formData.foto} onChange={handleChange}
+            />
+          </div>
           {/* Dropdown con todas las opciones o filtradas */}
-          {dropdownOpen && (
+          {/*dropdownOpen && (
             <div className="dropdown-list">
               {(search ? filteredIntolerancias : intoleranciasDisponibles).map(i => (
                 <div
@@ -154,50 +199,23 @@ const AgregarPaciente = () => {
                 <div className="dropdown-item">No se encontraron opciones</div>
               )}
             </div>
-          )}
+              )*/}
 
           {/* Lista de intolerancias seleccionadas */}
-          <div className="selected-list">
+         {/*<div className="selected-list">
             {intoleranciasSeleccionadas.map(i => (
               <div key={i} className="selected-item">
                 {i} <span onClick={() => handleIntoleranciaRemove(i)}>✕</span>
               </div>
             ))}
-          </div>
+            </div>*/}
         </div>
-          <div className="campo">
-            <label htmlFor="estudioLaboratorio">Estudio Laboratorio</label>
-            <input type="file" id="estudioLaboratorio" name="estudioLaboratorio" className="input" onChange={handleFileChange}
-            />
-          </div>
 
-          <div className="campo">
-            <label htmlFor="alergiasIgE">¿Tiene alergias IgE?</label>
-            <select id="alergiasIgE" name="alergiasIgE" className="select" value={formData.alergiasIgE} onChange={handleChange} required>
-              <option value="">Selecciona opción</option>
-              <option value="si">Sí</option>
-              <option value="no">No</option>
-            </select>
-          </div>
 
-          <div className="campo">
-            <label htmlFor="intoleranciasIgG">¿Tiene intolerancias IgG?</label>
-            <select id="intoleranciasIgG" name="intoleranciasIgG" className="select" value={formData.intoleranciasIgG} onChange={handleChange} required >
-              <option value="">Selecciona opción</option>
-              <option value="si">Sí</option>
-              <option value="no">No</option>
-            </select>
-          </div>
-
-          <div className="campo">
+        <div className="campo">
             <label htmlFor="sexo">Sexo</label>
-            <select id="sexo" name="sexo" className="select" value={formData.sexo} onChange={handleChange} required
-            >
-              <option value="">Selecciona opción</option>
-              <option value="femenino">Femenino</option>
-              <option value="masculino">Masculino</option>
-              <option value="otro">Otro</option>
-            </select>
+            <input type="text" id="sexo" name="sexo" className="input" placeholder="Sexo" value={formData.sexo} onChange={handleChange}
+            />
           </div>
 
           <div className="campo">
@@ -210,8 +228,13 @@ const AgregarPaciente = () => {
           <div className="persona-cargo">
             <h3>PERSONA A CARGO 1</h3>
             <div className="campo">
-              <label>Nombre y Apellido</label>
-              <input type="text" name="nombrePersonaACargo1" className="input" placeholder="Nombre y Apellido" value={formData.nombrePersonaACargo1} onChange={handleChange}
+              <label>Nombre</label>
+              <input type="text" name="nombrePersonaACargo1" className="input" placeholder="Nombre" value={formData.nombrePersonaACargo1} onChange={handleChange}
+              />
+            </div>
+            <div className="campo">
+              <label>Apellido</label>
+              <input type="text" name="apellidoPersonaACargo1" className="input" placeholder="Apellido" value={formData.apellidoPersonaACargo1} onChange={handleChange}
               />
             </div>
             <div className="campo">
@@ -233,9 +256,15 @@ const AgregarPaciente = () => {
 
           <div className="persona-cargo">
             <h3>PERSONA A CARGO 2</h3>
+           
             <div className="campo">
-              <label>Nombre y Apellido</label>
-              <input type="text" name="nombrePersonaACargo2" className="input" placeholder="Nombre y Apellido" value={formData.nombrePersonaACargo2} onChange={handleChange}
+              <label>Nombre</label>
+              <input type="text" name="nombrePersonaACargo2" className="input" placeholder="Nombre" value={formData.nombrePersonaACargo2} onChange={handleChange}
+              />
+            </div>
+            <div className="campo">
+              <label>Apellido</label>
+              <input type="text" name="apellidoPersonaACargo2" className="input" placeholder="Apellido" value={formData.apellidoPersonaACargo2} onChange={handleChange}
               />
             </div>
             <div className="campo">
@@ -254,12 +283,16 @@ const AgregarPaciente = () => {
               />
             </div>
           </div>
+          {errors.name && <span>{errors.name}</span>}
 
-          <button type="submit" className="boton-enviar">ENVIAR</button>
+          <button type="submit" >Crear Usuario</button>
+            {success && (
+              <div >¡Usuario creado exitosamente!</div>
+            )}
         </form>
       </div>
     </>
   );
-};
+}
 
 export default AgregarPaciente;
