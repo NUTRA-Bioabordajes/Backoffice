@@ -40,6 +40,22 @@ body {
     background-color: white;
     color: #000; 
   }
+  .agregar-paciente-link{
+    display: inline-block;
+    margin-bottom: 15px;
+    padding: 8px 15px;
+    background-color: #E0CAC7;
+    color:white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s;
+  }
+  .agregar-paciente-link:hover {
+    background-color: #cfa49e;
+    color:#f2f2f2;
+    
+  }
   
   .input::placeholder,
   .select {

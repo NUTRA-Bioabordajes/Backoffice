@@ -1,13 +1,214 @@
-.agregar-paciente-link {
-    display: inline-block;
-    margin-top: 10px;
-    color: #000000;
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 14px;
-}
+.pacientes-container {
+    padding: 20px;
+    border-radius: 2%;
+    font-family: Arial, sans-serif;
+    background-color: #fcf9f3;
+    color: #333;
+  }
+  
+  .titulo {
+    font-weight: 600;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+  }
 
-.agregar-paciente-link:hover {
-    text-decoration: underline;
-    color: #CBD2E2;
-}
+  .loading-text,
+  .error-text,
+  .sin-pacientes-text {
+    font-weight: 500;
+    margin-top: 10px;
+    font-size: 1rem;
+  }
+  .tabla-wrapper {
+    max-height: 75%;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    color: #000; 
+  }
+  
+  .tabla-pacientes {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  .tabla-pacientes thead tr {
+    background-color: #f5f0e7;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #333;
+    text-align: left;
+  }
+  
+  .tabla-pacientes th,
+  .tabla-pacientes td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e3ded3;
+  }
+  
+  .tabla-pacientes tbody tr:nth-child(even) {
+    background-color: #fdf9f3;
+  }
+  
+  .tabla-pacientes tbody tr:hover {
+    background-color: #f1ede7;
+    transition: background-color 0.2s ease;
+  }
+  
+  .foto-paciente {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  @media (max-width: 768px) {
+    .tabla-pacientes {
+      font-size: 0.8rem;
+    }
+    .titulo {
+      font-size: 1.5rem;
+    }
+    .agregar-paciente-link {
+      font-size: 0.9rem;
+    }
+  }
+  body {
+      background-color: #f8f3ea;
+      font-family: Arial, sans-serif;
+      padding-top: 40px;
+      margin: 0;
+      height: auto;
+      min-height: 100vh;
+      overflow-y: auto;
+    }
+    
+    .formulario {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: #fffaf3;
+      border-radius: 10px;
+    }
+    
+    .campo {
+      margin-bottom: 1.5rem;
+    }
+    
+    .campo label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.4rem;
+      color: #444;
+    }
+    
+    .input,
+    .select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2px solid #c3b3ff; 
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease;
+      background-color: white;
+      color: #000; 
+    }
+    .agregar-paciente-link{
+      display: inline-block;
+      margin-bottom: 15px;
+      padding: 8px 15px;
+      background-color: #E0CAC7;
+      color:white;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .agregar-paciente-link:hover {
+      background-color: #cfa49e;
+      color:#f2f2f2;
+      
+    }
+    
+    .input::placeholder,
+    .select {
+      color: #999;
+    }
+    
+    .input:focus,
+    .select:focus {
+      border-color: #8b5cf6;
+      color: #000; 
+    }
+    
+    .input.error {
+      border-color: #f87171;
+    }
+    
+    .campo .error-message {
+      color: #f87171;
+      font-size: 12px;
+      margin-top: 0.3rem;
+    }
+    
+    .persona-cargo {
+      margin-bottom: 2.5rem; 
+    }
+    
+    h3 {
+      font-size: 25px;
+      margin-bottom: 0.8rem; 
+      color: #444;
+    }
+    
+    .persona-cargo .input {
+      margin-bottom: 0.8rem; 
+    }
+    
+   
+    .boton-enviar {
+      display: block;
+      width: 100%;
+      background-color: #a78bfa; 
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    
+    .boton-enviar:hover {
+      background-color: #8b5cf6; 
+    }
+    
+    .boton-enviar:disabled {
+      background-color: #d1c4f7;
+      cursor: not-allowed;
+    }
+    
+    .form-container {
+      max-width: 1000px;
+      height: 90vh;
+      width: 1000px;; 
+      overflow-y: auto;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);  
+    }
+    
+    
+  
