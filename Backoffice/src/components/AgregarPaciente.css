@@ -1,180 +1,163 @@
-
 body {
-    background-color: #f8f3ea;
-    font-family: Arial, sans-serif;
-    padding-top: 40px;
-    margin: 0;
-    height: auto;
-    min-height: 100vh;
-    overflow-y: auto;
-  }
-  .checkbox-group {
-    display: flex;
-    gap: 20px;        
-    flex-wrap: wrap;  
-    align-items: center;
-  }
-  .checkbox-group label {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #333;
-    vertical-align: middle;
-    line-height: 18px;
-  }
-  
-  .checkbox-group input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid #666;
-    border-radius: 4px;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-    vertical-align: middle;
-  }
-  
-  
-  .formulario {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 2rem;
-    background-color: #fffaf3;
-    border-radius: 10px;
-  }
-  
-  .campo {
-    margin-bottom: 1.5rem;
-  }
-  
-  .campo label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 0.4rem;
-    color: #444;
-  }
+  background-color: #f8f3ea;
+  font-family: Arial, sans-serif;
+  padding-top: 40px;
+  margin: 0;
+  height: auto;
+  min-height: 100vh;
+  overflow-y: auto;
+}
 
+.checkbox-group {
+  display: flex;
+  gap: 20px;        
+  flex-wrap: wrap;  
+  align-items: center;
+}
 
-  
-  .checkbox-group input[type="checkbox"]:checked {
-    background-color: #a78bfa;  
-    border-color: #a78bfa;
-  }
-  
-  .checkbox-group input[type="checkbox"]:checked::after {
-    content: "";
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    width: 6px;
-    height: 6px;
-    background: white;
-    border-radius: 50%;
-  }
-  .input,
-  .select {
-    width: 100%;
-    padding: 10px 12px;
-    border: 2px solid #c3b3ff; 
-    border-radius: 8px;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s ease;
-    background-color: white;
-    color: #000; 
-  }
-  .agregar-paciente-link{
-    display: inline-block;
-    margin-bottom: 15px;
-    padding: 8px 15px;
-    background-color: #E0CAC7;
-    color:white;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background 0.3s;
-  }
-  .agregar-paciente-link:hover {
-    background-color: #cfa49e;
-    color:#f2f2f2;
-    
-  }
-  
-  .input::placeholder,
-  .select {
-    color: #999;
-  }
-  
-  .input:focus,
-  .select:focus {
-    border-color: #8b5cf6;
-    color: #000; 
-  }
-  
-  .input.error {
-    border-color: #f87171;
-  }
-  
-  .campo .error-message {
-    color: #f87171;
-    font-size: 12px;
-    margin-top: 0.3rem;
-  }
-  
-  .persona-cargo {
-    margin-bottom: 2.5rem; 
-  }
-  
-  h3 {
-    font-size: 25px;
-    margin-bottom: 0.8rem; 
-    color: #444;
-  }
-  
-  .persona-cargo .input {
-    margin-bottom: 0.8rem; 
-  }
-  
- 
-  .boton-enviar {
-    display: block;
-    width: 100%;
-    background-color: #a78bfa; 
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .boton-enviar:hover {
-    background-color: #8b5cf6; 
-  }
-  
-  .boton-enviar:disabled {
-    background-color: #d1c4f7;
-    cursor: not-allowed;
-  }
-  
-  .form-container {
-    max-width: 1000px;
-    height: 90vh;
-    width: 1000px;; 
-    overflow-y: auto;
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);  
-  }
-  
-  
+.checkbox-group label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  vertical-align: middle;
+  line-height: 18px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  accent-color: #a78bfa;   /* pinta el check en violeta */
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  border-radius: 4px; 
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+/* FORMULARIO GENERAL */
+.formulario {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #fffaf3;
+  border-radius: 10px;
+}
+
+.campo {
+  margin-bottom: 1.5rem;
+}
+
+.campo label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.4rem;
+  color: #444;
+}
+
+/* INPUTS Y SELECTS */
+.input,
+.select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #c3b3ff; 
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  background-color: white;
+  color: #000; 
+}
+
+.input::placeholder,
+.select {
+  color: #999;
+}
+
+.input:focus,
+.select:focus {
+  border-color: #8b5cf6;
+  color: #000; 
+}
+
+.input.error {
+  border-color: #f87171;
+}
+
+.campo .error-message {
+  color: #f87171;
+  font-size: 12px;
+  margin-top: 0.3rem;
+}
+
+/* LINKS */
+.agregar-paciente-link {
+  display: inline-block;
+  margin-bottom: 15px;
+  padding: 8px 15px;
+  background-color: #E0CAC7;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.agregar-paciente-link:hover {
+  background-color: #cfa49e;
+  color: #f2f2f2;
+}
+
+/* PERSONA A CARGO */
+.persona-cargo {
+  margin-bottom: 2.5rem; 
+}
+
+h3 {
+  font-size: 25px;
+  margin-bottom: 0.8rem; 
+  color: #444;
+}
+
+.persona-cargo .input {
+  margin-bottom: 0.8rem; 
+}
+
+/* BOTÓN ENVIAR */
+.boton-enviar {
+  display: block;
+  width: 100%;
+  background-color: #a78bfa; 
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.boton-enviar:hover {
+  background-color: #8b5cf6; 
+}
+
+.boton-enviar:disabled {
+  background-color: #d1c4f7;
+  cursor: not-allowed;
+}
+
+/* CONTENEDOR FORM */
+.form-container {
+  max-width: 1000px;
+  height: 90vh;
+  width: 1000px; 
+  overflow-y: auto;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);  
+}
