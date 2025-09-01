@@ -11,10 +11,10 @@ import AgregarPaciente from './components/AgregarPaciente';
 import AgregarReceta from './components/AgregarReceta';
 
 function App() {
-  return (
+      return (
     <BrowserRouter>
       <Routes>
-
+      
         {/* Rutas públicas */}
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />

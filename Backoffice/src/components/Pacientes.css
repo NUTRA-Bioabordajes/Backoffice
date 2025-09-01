@@ -76,9 +76,6 @@
     .titulo {
       font-size: 1.5rem;
     }
-    .agregar-paciente-link {
-      font-size: 0.9rem;
-    }
   }
   body {
       background-color: #f8f3ea;
@@ -201,7 +198,7 @@
     .form-container {
       max-width: 1000px;
       height: 90vh;
-      width: 1000px;; 
+      width: 1000px;
       overflow-y: auto;
       margin: 0 auto;
       background-color: #fff;
