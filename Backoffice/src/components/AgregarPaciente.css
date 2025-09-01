@@ -8,6 +8,37 @@ body {
     min-height: 100vh;
     overflow-y: auto;
   }
+  .checkbox-group {
+    display: flex;
+    gap: 20px;        
+    flex-wrap: wrap;  
+    align-items: center;
+  }
+  .checkbox-group label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    vertical-align: middle;
+    line-height: 18px;
+  }
+  
+  .checkbox-group input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #666;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    vertical-align: middle;
+  }
+  
   
   .formulario {
     max-width: 1000px;
@@ -27,7 +58,24 @@ body {
     margin-bottom: 0.4rem;
     color: #444;
   }
+
+
   
+  .checkbox-group input[type="checkbox"]:checked {
+    background-color: #a78bfa;  
+    border-color: #a78bfa;
+  }
+  
+  .checkbox-group input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+  }
   .input,
   .select {
     width: 100%;
