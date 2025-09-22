@@ -31,7 +31,7 @@ const VerReceta = () => {
   return (
     <div className="recetas-container">
       <h1 className="titulo">Recetas</h1>
-      <Link to="/dashboard/gregarReceta" className="agregar-receta-link">
+      <Link to="/dashboard/AgregarReceta" className="agregar-receta-link">
         + Agregar Receta
       </Link>
 

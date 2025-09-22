@@ -26,6 +26,7 @@
   
   .agregar-receta-link:hover {
     background-color: #cfa49e;
+    color: white;
   }
   
   .sin-recetas-text,

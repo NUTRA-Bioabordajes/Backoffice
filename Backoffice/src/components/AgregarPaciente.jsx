@@ -12,7 +12,7 @@ const AgregarPaciente = () => {
     edad: "",
     diagnostico: "",
     idMedicoTratante: "",
-    intolerancias: [],  
+    intolerancias: [],  // Ahora será array de string
     sexo: "",
     barrio: "",
     nombrePersonaACargo1: "",
@@ -33,37 +33,32 @@ const AgregarPaciente = () => {
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
-  
   useEffect(() => {
     fetch("http://localhost:3000/intolerancias")
       .then(res => res.json())
       .then(data => {
-        console.log("Intolerancias cargadas desde API:", data);
-        // 👇 normalizamos a objetos {value, label} y forzamos a número
         const normalizados = data.map(i => ({
-          value: Number(i.idIntolerancia).toString(),
+          value: String(i.idIntolerancia), // siempre string
           label: i.Nombre
         }));
         setIntoleranciasDisponibles(normalizados);
       })
       .catch(err => console.error("Error cargando intolerancias:", err));
   }, []);
-  
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // Mantener como string
   const handleIntoleranciasChange = (selectedOptions) => {
     const idsSeleccionados = selectedOptions
-      ? [...new Set(selectedOptions.map(opt => Number(opt.value)))]
+      ? selectedOptions.map(opt => opt.value)
       : [];
     setFormData(prev => ({ ...prev, intolerancias: idsSeleccionados }));
   };
-  
-  
+
   const validate = () => {
     const newErrors = {};
     if (!formData.edad || isNaN(formData.edad) || formData.edad <= 0) {
@@ -77,10 +72,15 @@ const AgregarPaciente = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    console.log(formData)
+
+    // Si tu backend espera los ids como número, convierte aquí
+    const dataToSend = {
+      ...formData,
+      intolerancias: formData.intolerancias.map(id => Number(id)),
+    };
 
     try {
-      await axios.post("http://localhost:3000/usuarios/nuevoUsuario", formData);
+      await axios.post("http://localhost:3000/usuarios/nuevoUsuario", dataToSend);
 
       setSuccess(true);
       setTimeout(() => {
@@ -100,7 +100,6 @@ const AgregarPaciente = () => {
   useEffect(() => {
     console.log("Intolerancias seleccionadas:", formData.intolerancias);
   }, [formData.intolerancias]);
-  
 
   return (
     <div className="form-container">
@@ -125,7 +124,7 @@ const AgregarPaciente = () => {
             name="apellido"
             className="input"
             value={formData.apellido}
-            onChange={  handleChange}
+            onChange={handleChange}
           />
         </div>
 
@@ -182,14 +181,13 @@ const AgregarPaciente = () => {
             isMulti
             options={intoleranciasDisponibles}
             value={intoleranciasDisponibles.filter(opt =>
-              formData.intolerancias.includes(Number(opt.value))
+              formData.intolerancias.includes(opt.value)
             )}
             onChange={handleIntoleranciasChange}
             className="basic-multi-select"
             classNamePrefix="select"
             placeholder="Seleccione intolerancias..."
           />
-
         </div>
 
         <div className="campo">
