@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import './AgregarPaciente.css';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Select from "react-select";
 
 const AgregarPaciente = () => {
   const [formData, setFormData] = useState({
@@ -32,31 +33,37 @@ const AgregarPaciente = () => {
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
+  
   useEffect(() => {
     fetch("http://localhost:3000/intolerancias")
       .then(res => res.json())
       .then(data => {
-        setIntoleranciasDisponibles(data);
+        console.log("Intolerancias cargadas desde API:", data);
+        // 👇 normalizamos a objetos {value, label} y forzamos a número
+        const normalizados = data.map(i => ({
+          value: Number(i.idIntolerancia).toString(),
+          label: i.Nombre
+        }));
+        setIntoleranciasDisponibles(normalizados);
       })
       .catch(err => console.error("Error cargando intolerancias:", err));
   }, []);
+  
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleIntoleranciaToggle = (idIntolerancia) => {
-    setFormData(prev => {
-      const alreadySelected = prev.intolerancias.includes(idIntolerancia);
-      return {
-        ...prev,
-        intolerancias: alreadySelected
-          ? prev.intolerancias.filter(i => i !== idIntolerancia)
-          : [...prev.intolerancias, idIntolerancia]
-      };
-    });
+  const handleIntoleranciasChange = (selectedOptions) => {
+    const idsSeleccionados = selectedOptions
+      ? [...new Set(selectedOptions.map(opt => Number(opt.value)))]
+      : [];
+    setFormData(prev => ({ ...prev, intolerancias: idsSeleccionados }));
   };
+  
+  
   const validate = () => {
     const newErrors = {};
     if (!formData.edad || isNaN(formData.edad) || formData.edad <= 0) {
@@ -70,6 +77,7 @@ const AgregarPaciente = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
+    console.log(formData)
 
     try {
       await axios.post("http://localhost:3000/usuarios/nuevoUsuario", formData);
@@ -88,6 +96,7 @@ const AgregarPaciente = () => {
       setSuccess(false);
     }
   };
+
   useEffect(() => {
     console.log("Intolerancias seleccionadas:", formData.intolerancias);
   }, [formData.intolerancias]);
@@ -116,7 +125,7 @@ const AgregarPaciente = () => {
             name="apellido"
             className="input"
             value={formData.apellido}
-            onChange={handleChange}
+            onChange={  handleChange}
           />
         </div>
 
@@ -166,22 +175,21 @@ const AgregarPaciente = () => {
           {errors.idMedicoTratante && <p className="error">{errors.idMedicoTratante}</p>}
         </div>
 
-        {/* INTOLERANCIAS */}
+        {/* INTOLERANCIAS con react-select */}
         <div className="campo">
           <label>Intolerancias</label>
-          <div className="checkbox-group">
-            {intoleranciasDisponibles.map(i => (
-              <label key={i.idIntolerancia}>
-                <input
-                  type="checkbox"
-                  checked={formData.intolerancias.includes(i.idIntolerancia)}
-                  onChange={() => handleIntoleranciaToggle(i.idIntolerancia)}
-                />
+          <Select
+            isMulti
+            options={intoleranciasDisponibles}
+            value={intoleranciasDisponibles.filter(opt =>
+              formData.intolerancias.includes(Number(opt.value))
+            )}
+            onChange={handleIntoleranciasChange}
+            className="basic-multi-select"
+            classNamePrefix="select"
+            placeholder="Seleccione intolerancias..."
+          />
 
-                {i.Nombre}
-              </label>
-            ))}
-          </div>
         </div>
 
         <div className="campo">
@@ -194,11 +202,19 @@ const AgregarPaciente = () => {
             onChange={handleChange}
           />
         </div>
+
         <div className="campo">
-            <label htmlFor="foto">Foto</label>
-            <input type="text" id="foto" name="foto" className="input" placeholder="Foto" value={formData.foto} onChange={handleChange}
-            />
-          </div>
+          <label htmlFor="foto">Foto</label>
+          <input
+            type="text"
+            id="foto"
+            name="foto"
+            className="input"
+            placeholder="Foto"
+            value={formData.foto}
+            onChange={handleChange}
+          />
+        </div>
 
         <div className="campo">
           <label>Barrio</label>
@@ -211,67 +227,59 @@ const AgregarPaciente = () => {
           />
         </div>
 
+        {/* PERSONA A CARGO 1 */}
         <div className="persona-cargo">
-            <h3>PERSONA A CARGO 1</h3>
-            <div className="campo">
-              <label>Nombre</label>
-              <input type="text" name="nombrePersonaACargo1" className="input" placeholder="Nombre" value={formData.nombrePersonaACargo1} onChange={handleChange}
-              />
-            </div>
-            <div className="campo">
-              <label>Apellido</label>
-              <input type="text" name="apellidoPersonaACargo1" className="input" placeholder="Apellido" value={formData.apellidoPersonaACargo1} onChange={handleChange}
-              />
-            </div>
-            <div className="campo">
-              <label>DNI</label>
-              <input type="text" name="dniPersonaACargo1" className="input" placeholder="DNI" value={formData.dniPersonaACargo1} onChange={handleChange}
-              />
-            </div>
-            <div className="campo">
-              <label>Email</label>
-              <input type="email" name="emailPersonaACargo1" className="input" placeholder="Email" value={formData.emailPersonaACargo1} onChange={handleChange}
-              />
-            </div>
-            <div className="campo">
-              <label>Teléfono</label>
-              <input type="tel" name="telefonoPersonaACargo1" className="input" placeholder="Teléfono" value={formData.telefonoPersonaACargo1} onChange={handleChange}
-              />
-            </div>
+          <h3>PERSONA A CARGO 1</h3>
+          <div className="campo">
+            <label>Nombre</label>
+            <input type="text" name="nombrePersonaACargo1" className="input" placeholder="Nombre" value={formData.nombrePersonaACargo1} onChange={handleChange} />
           </div>
-
-          <div className="persona-cargo">
-            <h3>PERSONA A CARGO 2</h3>
-           
-            <div className="campo">
-              <label>Nombre</label>
-              <input type="text" name="nombrePersonaACargo2" className="input" placeholder="Nombre" value={formData.nombrePersonaACargo2} onChange={handleChange}
-              />
-            </div>
-            <div className="campo">
-              <label>Apellido</label>
-              <input type="text" name="apellidoPersonaACargo2" className="input" placeholder="Apellido" value={formData.apellidoPersonaACargo2} onChange={handleChange}
-              />
-            </div>
-            <div className="campo">
-              <label>DNI</label>
-              <input type="text" name="dniPersonaACargo2" className="input" placeholder="DNI" value={formData.dniPersonaACargo2} onChange={handleChange}
-              />
-            </div>
-            <div className="campo">
-              <label>Email</label>
-              <input type="email" name="emailPersonaACargo2" className="input" placeholder="Email" value={formData.emailPersonaACargo2} onChange={handleChange}
-              />
-            </div>
-            <div className="campo">
-              <label>Teléfono</label>
-              <input type="tel" name="telefonoPersonaACargo2" className="input" placeholder="Teléfono" value={formData.telefonoPersonaACargo2} onChange={handleChange}
-              />
-            </div>
+          <div className="campo">
+            <label>Apellido</label>
+            <input type="text" name="apellidoPersonaACargo1" className="input" placeholder="Apellido" value={formData.apellidoPersonaACargo1} onChange={handleChange} />
           </div>
-          {errors.name && <span>{errors.name}</span>}   
+          <div className="campo">
+            <label>DNI</label>
+            <input type="text" name="dniPersonaACargo1" className="input" placeholder="DNI" value={formData.dniPersonaACargo1} onChange={handleChange} />
+          </div>
+          <div className="campo">
+            <label>Email</label>
+            <input type="email" name="emailPersonaACargo1" className="input" placeholder="Email" value={formData.emailPersonaACargo1} onChange={handleChange} />
+          </div>
+          <div className="campo">
+            <label>Teléfono</label>
+            <input type="tel" name="telefonoPersonaACargo1" className="input" placeholder="Teléfono" value={formData.telefonoPersonaACargo1} onChange={handleChange} />
+          </div>
+        </div>
 
-        <button type="submit">Crear Usuario</button>
+        {/* PERSONA A CARGO 2 */}
+        <div className="persona-cargo">
+          <h3>PERSONA A CARGO 2</h3>
+          <div className="campo">
+            <label>Nombre</label>
+            <input type="text" name="nombrePersonaACargo2" className="input" placeholder="Nombre" value={formData.nombrePersonaACargo2} onChange={handleChange} />
+          </div>
+          <div className="campo">
+            <label>Apellido</label>
+            <input type="text" name="apellidoPersonaACargo2" className="input" placeholder="Apellido" value={formData.apellidoPersonaACargo2} onChange={handleChange} />
+          </div>
+          <div className="campo">
+            <label>DNI</label>
+            <input type="text" name="dniPersonaACargo2" className="input" placeholder="DNI" value={formData.dniPersonaACargo2} onChange={handleChange} />
+          </div>
+          <div className="campo">
+            <label>Email</label>
+            <input type="email" name="emailPersonaACargo2" className="input" placeholder="Email" value={formData.emailPersonaACargo2} onChange={handleChange} />
+          </div>
+          <div className="campo">
+            <label>Teléfono</label>
+            <input type="tel" name="telefonoPersonaACargo2" className="input" placeholder="Teléfono" value={formData.telefonoPersonaACargo2} onChange={handleChange} />
+          </div>
+        </div>
+
+        {errors.name && <span>{errors.name}</span>}   
+
+        <button type="submit" className="boton-enviar">Crear Usuario</button>
         {success && <div>¡Usuario creado exitosamente!</div>}
       </form>
     </div>
