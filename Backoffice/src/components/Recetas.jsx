@@ -58,11 +58,10 @@ const VerReceta = () => {
     }
   };
 
-  // 🟡 Editar receta → redirige a un formulario con el id
   const handleEdit = (idReceta) => {
-    navigate(`dashboard/editarReceta/${idReceta}`);
+    navigate(`/dashboard/editarReceta/${idReceta}`);
   };
-
+  
   if (loading) return <p className="loading-text">Cargando recetas...</p>;
   if (error) return <p className="error-text">Error: {error}</p>;
 

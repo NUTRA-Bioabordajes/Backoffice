@@ -11,7 +11,7 @@ import AgregarPaciente from './components/AgregarPaciente';
 import AgregarReceta from './components/AgregarReceta';
 import AgregarProducto from './components/AgregarProducto';
 import EditarReceta from './components/EditarReceta';
-
+import EditarPaciente from './components/EditarPaciente';
 
 function App() {
       return (
@@ -31,7 +31,9 @@ function App() {
           <Route path="agregarPaciente" element={<AgregarPaciente />} />
           <Route path="agregarReceta" element={<AgregarReceta />} />
           <Route path="agregarProducto" element={<AgregarProducto />} />
-          <Route path="editarReceta" element={<EditarReceta />} />
+          <Route path="editarReceta/:idReceta" element={<EditarReceta />} />
+          <Route path="editarPaciente/:idPaciente" element={<EditarPaciente />} />
+
         </Route>
 
         {/* Página por defecto si no coincide ninguna */}

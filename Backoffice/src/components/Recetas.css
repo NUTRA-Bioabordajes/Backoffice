@@ -4,6 +4,7 @@
     color: #000;
     height: 75vh; 
     overflow-y: auto; 
+    width: 1400px;
   }
   
   .titulo {
