@@ -1,155 +1,108 @@
-// src/components/EditarPaciente.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "./EditarPaciente.css";
+import "./EditarReceta.css";
 
-const EditarPaciente = () => {
-  const { id } = useParams(); // asegúrate que la ruta en App.jsx es: editarPaciente/:id
+const EditarReceta = () => {
+  const { idReceta } = useParams();
   const navigate = useNavigate();
-
-  const [paciente, setPaciente] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [receta, setReceta] = useState(null);
 
   useEffect(() => {
-    let mounted = true;
-    const controller = new AbortController();
+    const token = sessionStorage.getItem("token");
+    fetch(`http://localhost:3000/recetas/${idReceta}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setReceta(data))
+      .catch((err) => console.error(err));
+  }, [idReceta]);
 
-    const fetchPaciente = async () => {
-      setLoading(true);
-      setError(null);
+  if (!receta) return <p>Cargando receta...</p>;
 
-      try {
-        const token = sessionStorage.getItem("token");
-        if (!token) throw new Error("Token no encontrado en sessionStorage");
-
-        const res = await fetch(`http://localhost:3000/usuarios/${id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          signal: controller.signal,
-        });
-
-        if (!res.ok) {
-          // captura códigos diferentes para info más clara
-          if (res.status === 401) throw new Error("No autorizado (401). Revisa el token.");
-          if (res.status === 404) throw new Error("Paciente no encontrado (404).");
-          const txt = await res.text();
-          throw new Error(`Error ${res.status}: ${txt}`);
-        }
-
-        const data = await res.json();
-        // fallback si backend devolviera un array
-        const pacienteData = Array.isArray(data) ? data[0] : data;
-
-        if (!pacienteData) throw new Error("Respuesta vacía del servidor");
-
-        if (mounted) setPaciente(pacienteData);
-      } catch (err) {
-        if (err.name === "AbortError") return; // navegación rápida -> no mostrar error
-        console.error("fetchPaciente error:", err);
-        if (mounted) setError(err.message || "Error desconocido");
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    };
-
-    fetchPaciente();
-
-    return () => {
-      mounted = false;
-      controller.abort();
-    };
-  }, [id]);
-
-  if (loading)
-    return (
-      <div className="editar-paciente-container">
-        <p className="loading-text">Cargando paciente...</p>
-      </div>
-    );
-
-  if (error)
-    return (
-      <div className="editar-paciente-container">
-        <p className="error-text">Error: {error}</p>
-        <div style={{ marginTop: 16 }}>
-          <button onClick={() => navigate("/dashboard/pacientes")} className="btn-cancelar">
-            Volver a Pacientes
-          </button>
-        </div>
-      </div>
-    );
-
-  // manejo del formulario (igual que antes)
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPaciente({ ...paciente, [name]: value });
+    setReceta({ ...receta, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const token = sessionStorage.getItem("token");
-      const res = await fetch(`http://localhost:3000/usuarios/${id}`, {
+      const res = await fetch("http://localhost:3000/recetas", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify(paciente),
+        body: JSON.stringify(receta),
       });
 
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(`Error al actualizar: ${res.status} ${txt}`);
-      }
+      if (!res.ok) throw new Error("Error al actualizar receta");
 
-      alert("Paciente actualizado con éxito ✅");
-      navigate("/dashboard/pacientes");
+      alert("Receta actualizada con éxito ✅");
+      navigate("/dashboard/recetas");
     } catch (err) {
-      console.error("update error:", err);
-      alert("Error: " + (err.message || "Error desconocido"));
+      alert("Error: " + err.message);
     }
   };
 
   return (
-    <div className="editar-paciente-container">
-      <h1>Editar paciente #{id}</h1>
-      <form onSubmit={handleSubmit}>
-        <label>DNI:</label>
-        <input type="text" name="dni" value={paciente.dni || ""} onChange={handleChange} />
-
+    <div className="editar-receta-container">
+      <h1>Editar receta</h1>
+      <form onSubmit={handleSubmit} className="editar-receta-form">
         <label>Nombre:</label>
-        <input type="text" name="nombre" value={paciente.nombre || ""} onChange={handleChange} />
+        <input
+          type="text"
+          name="Nombre"
+          value={receta.Nombre || ""}
+          onChange={handleChange}
+        />
 
-        <label>Apellido:</label>
-        <input type="text" name="apellido" value={paciente.apellido || ""} onChange={handleChange} />
+        <label>Descripción:</label>
+        <textarea
+          name="Descripcion"
+          value={receta.Descripcion || ""}
+          onChange={handleChange}
+        />
 
-        <label>Diagnóstico:</label>
-        <textarea name="diagnostico" value={paciente.diagnostico || ""} onChange={handleChange} />
+        <label>Elaboración:</label>
+        <textarea
+          name="Elaboracion"
+          value={receta.Elaboracion || ""}
+          onChange={handleChange}
+        />
 
-        <label>Sexo:</label>
-        <input type="text" name="sexo" value={paciente.sexo || ""} onChange={handleChange} />
-
-        <label>Barrio:</label>
-        <input type="text" name="barrio" value={paciente.barrio || ""} onChange={handleChange} />
-
-        <label>ID Médico:</label>
-        <input type="text" name="idMedico" value={paciente.idMedico || ""} onChange={handleChange} />
+        <label>Categoría:</label>
+        <input
+          type="text"
+          name="idCategoria"
+          value={receta.idCategoria || ""}
+          onChange={handleChange}
+        />
 
         <label>Foto (URL):</label>
-        <input type="text" name="foto" value={paciente.foto || ""} onChange={handleChange} />
+        <input
+          type="text"
+          name="Foto"
+          value={receta.Foto || ""}
+          onChange={handleChange}
+        />
 
-        <div className="editar-paciente-actions" style={{ marginTop: 12 }}>
-          <button type="submit" className="btn-guardar">💾 Guardar cambios</button>
-          <button type="button" className="btn-cancelar" onClick={() => navigate("/dashboard/pacientes")}>Cancelar</button>
+        <div className="editar-receta-actions">
+          <button type="submit" className="btn-guardar">Guardar cambios</button>
+          <button
+            type="button"
+            className="btn-cancelar"
+            onClick={() => navigate("/dashboard/recetas")}
+          >
+            Cancelar
+          </button>
         </div>
       </form>
     </div>
   );
 };
 
-export default EditarPaciente;
+export default EditarReceta;

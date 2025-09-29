@@ -34,7 +34,12 @@ const AgregarPaciente = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3000/intolerancias")
+    const token = sessionStorage.getItem("token");
+
+    fetch("http://localhost:3000/intolerancias", {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+)
       .then(res => res.json())
       .then(data => {
         const normalizados = data.map(i => ({

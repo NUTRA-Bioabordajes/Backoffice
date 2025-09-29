@@ -19,7 +19,11 @@ const AgregarReceta = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("http://localhost:3000/categorias")
+    const token = sessionStorage.getItem("token");
+    axios.get("http://localhost:3000/categorias", {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+)
       .then(res => {
         const options = res.data.map(c => ({
           value: String(c.idCategoria),
