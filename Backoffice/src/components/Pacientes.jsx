@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Pacientes.css";
 
 const Pacientes = () => {
@@ -7,12 +7,25 @@ const Pacientes = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    fetch("http://localhost:3000/usuarios")
+    fetchPacientes();
+  }, []);
+  
+
+  const fetchPacientes = () => {
+    setLoading(true);
+    const token = sessionStorage.getItem("token");
+
+    fetch("http://localhost:3000/usuarios", {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`, // 👈 token
+      },
+    })
       .then((res) => {
-        if (!res.ok) {
-          throw new Error("Error al traer los pacientes");
-        }
+        if (!res.ok) throw new Error("Error al traer los pacientes");
         return res.json();
       })
       .then((data) => {
@@ -23,7 +36,36 @@ const Pacientes = () => {
         setError(err.message);
         setLoading(false);
       });
-  }, []);
+  };
+
+  // 🔴 Eliminar paciente
+  const handleDelete = async (id) => {
+    if (!window.confirm("¿Seguro que quieres eliminar este paciente?")) return;
+
+    try {
+      const token = sessionStorage.getItem("token");
+
+      const res = await fetch(`http://localhost:3000/usuarios/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`, // 👈 token
+        },
+      });
+
+      if (!res.ok) throw new Error("Error al eliminar el paciente");
+
+      // Actualizamos el estado sin tener que volver a pedir todo
+      setPacientes(pacientes.filter((p) => p.id !== id));
+    } catch (err) {
+      alert("Error: " + err.message);
+    }
+  };
+
+  // 🟡 Editar paciente → redirige a una ruta con el id
+  const handleEdit = (id) => {
+    navigate(`/dashboard/editarPaciente/${id}`);
+  };
 
   if (loading) return <p className="loading-text">Cargando pacientes...</p>;
   if (error) return <p className="error-text">Error: {error}</p>;
@@ -51,6 +93,7 @@ const Pacientes = () => {
                 <th>Barrio</th>
                 <th>ID Médico</th>
                 <th>Foto</th>
+                <th>Acciones</th> 
               </tr>
             </thead>
             <tbody>
@@ -75,11 +118,25 @@ const Pacientes = () => {
                       "Sin foto"
                     )}
                   </td>
+                  <td>
+                    <button
+                      className="btn-editar"
+                      onClick={() => handleEdit(p.id)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="btn-eliminar"
+                      onClick={() => handleDelete(p.id)}
+                    >
+                      Eliminar
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>   
+        </div>
       )}
     </div>
   );

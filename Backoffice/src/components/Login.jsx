@@ -65,6 +65,7 @@ import './Login.css';
       console.log("Login response:", response.data);
       sessionStorage.setItem("token", response.data.token);
       sessionStorage.setItem("user", response.data.ID);
+      
 
       console.log(sessionStorage)
 

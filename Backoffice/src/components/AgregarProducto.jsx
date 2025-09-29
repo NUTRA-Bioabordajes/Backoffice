@@ -3,6 +3,7 @@ import './AgregarPaciente.css';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+
 const AgregarProducto = () => {
   const [formData, setFormData] = useState({
     nombre: "",
@@ -47,7 +48,7 @@ const AgregarProducto = () => {
     if (Object.keys(validationErrors).length > 0) return;
 
     try {
-      await axios.post("http://localhost:3000/productos/nuevoProducto", {
+      await axios.post("http://localhost:3000/productos", {
         ...formData,
         precio: parseFloat(formData.precio)
       });
@@ -87,6 +88,7 @@ const AgregarProducto = () => {
           <input
             type="number"
             step="0.01"
+            min="0"
             name="precio"
             className="input"
             value={formData.precio}
@@ -138,7 +140,7 @@ const AgregarProducto = () => {
         </div>
 
         <div className="campo">
-          <label>Cantidad</label>
+          <label>Cantidad de Stock</label>
           <input
             type="text"
             name="cantidad"

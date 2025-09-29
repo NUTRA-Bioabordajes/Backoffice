@@ -8,7 +8,14 @@ const Ecommerce = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/productos")
+    const token = sessionStorage.getItem("token");
+
+    fetch("http://localhost:3000/productos", {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`, // 👈 token
+      },
+    })
       .then((res) => {
         if (!res.ok) {
           throw new Error("Error al traer los productos");
