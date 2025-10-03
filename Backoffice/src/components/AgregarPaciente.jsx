@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import './AgregarPaciente.css';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Select from "react-select";
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+
 
 const AgregarPaciente = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +14,6 @@ const AgregarPaciente = () => {
     edad: "",
     diagnostico: "",
     idMedicoTratante: "",
-    intolerancias: [],  // Ahora será array de string
     sexo: "",
     barrio: "",
     nombrePersonaACargo1: "",
@@ -27,41 +28,34 @@ const AgregarPaciente = () => {
     telefonoPersonaACargo2: "",
     foto: ""
   });
-
+  const animatedComponents = makeAnimated();
   const [intoleranciasDisponibles, setIntoleranciasDisponibles] = useState([]);
+  const [intolerancias, setIntolerancias] = useState([]); // array de números
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
+  // Traer intolerancias desde la API
   useEffect(() => {
     const token = sessionStorage.getItem("token");
-
     fetch("http://localhost:3000/intolerancias", {
       headers: { Authorization: `Bearer ${token}` }
-    }
-)
+    })
       .then(res => res.json())
       .then(data => {
-        const normalizados = data.map(i => ({
-          value: String(i.idIntolerancia), // siempre string
+        // Convertimos a array de objetos {value:number,label:string}
+        const opciones = data.map(i => ({
+          value: Number(i.idIntolerancias),
           label: i.Nombre
         }));
-        setIntoleranciasDisponibles(normalizados);
+        setIntoleranciasDisponibles(opciones);
       })
-      .catch(err => console.error("Error cargando intolerancias:", err));
+      .catch(err => console.error(err));
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  // Mantener como string
-  const handleIntoleranciasChange = (selectedOptions) => {
-    const idsSeleccionados = selectedOptions
-      ? selectedOptions.map(opt => opt.value)
-      : [];
-    setFormData(prev => ({ ...prev, intolerancias: idsSeleccionados }));
   };
 
   const validate = () => {
@@ -78,10 +72,10 @@ const AgregarPaciente = () => {
     e.preventDefault();
     if (!validate()) return;
 
-    // Si tu backend espera los ids como número, convierte aquí
+    // Enviamos los IDs de intolerancias como números
     const dataToSend = {
       ...formData,
-      intolerancias: formData.intolerancias.map(id => Number(id)),
+      intolerancias: intolerancias.map(id => Number(id)),
     };
 
     try {
@@ -101,10 +95,6 @@ const AgregarPaciente = () => {
       setSuccess(false);
     }
   };
-
-  useEffect(() => {
-    console.log("Intolerancias seleccionadas:", formData.intolerancias);
-  }, [formData.intolerancias]);
 
   return (
     <div className="form-container">
@@ -179,21 +169,22 @@ const AgregarPaciente = () => {
           {errors.idMedicoTratante && <p className="error">{errors.idMedicoTratante}</p>}
         </div>
 
-        {/* INTOLERANCIAS con react-select */}
-        <div className="campo">
-          <label>Intolerancias</label>
-          <Select
-            isMulti
-            options={intoleranciasDisponibles}
-            value={intoleranciasDisponibles.filter(opt =>
-              formData.intolerancias.includes(opt.value)
-            )}
-            onChange={handleIntoleranciasChange}
-            className="basic-multi-select"
-            classNamePrefix="select"
-            placeholder="Seleccione intolerancias..."
-          />
-        </div>
+{/* NUEVO: Intolerancias */}
+<div className="campo">
+  <label>Intolerancias</label>
+  <Select
+  closeMenuOnSelect={true}       // cierra al seleccionar
+  components={animatedComponents}
+  isMulti
+  options={intoleranciasDisponibles}
+  value={intoleranciasDisponibles.filter(opt => intolerancias.includes(opt.value))}
+  onChange={(selectedOptions) => {
+    setIntolerancias(selectedOptions ? selectedOptions.map(o => o.value) : []);
+  }}
+  placeholder="Seleccione intolerancias..."
+/>
+</div>
+
 
         <div className="campo">
           <label>Sexo</label>

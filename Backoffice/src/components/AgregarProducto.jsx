@@ -42,16 +42,24 @@ const AgregarProducto = () => {
   };
 
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
 
     try {
+      const token = sessionStorage.getItem("token");
+      console.log("Token que se envía:", token); 
       await axios.post("http://localhost:3000/productos", {
         ...formData,
         precio: parseFloat(formData.precio)
-      });
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+    });
 
       setSuccess(true);
       setTimeout(() => {

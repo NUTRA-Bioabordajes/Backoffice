@@ -12,6 +12,11 @@ import AgregarReceta from './components/AgregarReceta';
 import AgregarProducto from './components/AgregarProducto';
 import EditarReceta from './components/EditarReceta';
 import EditarPaciente from './components/EditarPaciente';
+import EditarProducto from './components/EditarProducto';
+/*import dotenv from 'dotenv';
+
+dotenv.config();*/
+
 
 function App() {
       return (
@@ -33,6 +38,8 @@ function App() {
           <Route path="agregarProducto" element={<AgregarProducto />} />
           <Route path="editarReceta/:idReceta" element={<EditarReceta />} />
           <Route path="editarPaciente/:idPaciente" element={<EditarPaciente />} />
+          <Route path="editarProducto/:idProducto" element={<EditarProducto />} />
+
 
         </Route>
 

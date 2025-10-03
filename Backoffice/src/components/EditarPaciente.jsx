@@ -11,9 +11,7 @@ const EditarPaciente = () => {
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     fetch(`http://localhost:3000/usuarios/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => res.json())
       .then((data) => setPaciente(data))
@@ -45,7 +43,7 @@ const EditarPaciente = () => {
       if (!res.ok) throw new Error("Error al actualizar paciente");
 
       alert("Paciente actualizado con éxito ✅");
-      navigate("/dashboard/pacientes"); // 🔙 vuelve a la lista
+      navigate("/dashboard/pacientes"); //vuelve a la lista
     } catch (err) {
       alert("Error: " + err.message);
     }
