@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-//import "./EditarProducto.css";
+import "./EditarProducto.css";
 
 const EditarProducto = () => {
   const { idProducto } = useParams();
@@ -92,7 +92,7 @@ const EditarProducto = () => {
           <button
             type="button"
             className="btn-cancelar"
-            onClick={() => navigate("/dashboard/productos")}
+            onClick={() => navigate("/dashboard/ecommerce")}
           >
             Cancelar
           </button>

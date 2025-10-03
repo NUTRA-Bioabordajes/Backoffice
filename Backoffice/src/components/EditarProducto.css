@@ -1,0 +1,95 @@
+/* Contenedor principal */
+.editar-producto-container {
+    background-color: #faf6f2;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 1000px;
+    max-width: 1000px;
+    margin: 2rem auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Título */
+  .editar-producto-container h1 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  /* Formulario */
+  .editar-producto-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* Labels */
+  .editar-producto-form label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 0.3rem;
+  }
+  
+  /* Inputs y textarea */
+  .editar-producto-form input,
+  .editar-producto-form textarea,
+  .editar-producto-form select {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .editar-producto-form input:focus,
+  .editar-producto-form textarea:focus,
+  .editar-producto-form select:focus {
+    border-color: #b5838d;
+  }
+  
+  /* Botones */
+  .editar-producto-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .btn-guardar {
+    background-color: #b5838d;
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .btn-guardar:hover {
+    background-color: #9a6a74;
+  }
+  
+  .btn-cancelar {
+    background-color: transparent;
+    border: 1px solid #aaa;
+    color: #333;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  .btn-cancelar:hover {
+    background-color: #eee;
+    color: #000;
+  }
+  

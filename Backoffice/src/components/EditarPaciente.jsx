@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-//import "./EditarPaciente.css";
+import "./EditarPaciente.css";
 
 const EditarPaciente = () => {
   const { id } = useParams(); // 👈 viene desde /dashboard/editarPaciente/:id
