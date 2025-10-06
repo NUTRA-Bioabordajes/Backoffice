@@ -1,17 +1,16 @@
 .recetas-container {
   padding: 20px;
-  background-color: transparent; /* main ya tiene fondo */
+  background-color: #fffaf3;
   color: #000;
-  min-height: calc(100vh - 40px);
-  box-sizing: border-box;
-  width: 100%;
-  overflow-x: auto;
+  height: 75vh; 
+  overflow-y: auto; 
+  width: 1400px;
 }
 
 .titulo {
   font-size: 24px;
   margin-bottom: 15px;
-  color: #000;
+  color: #000; /* texto negro */
 }
 
 .agregar-receta-link {
@@ -19,12 +18,13 @@
   margin-bottom: 15px;
   padding: 8px 15px;
   background-color: #E0CAC7;
-  color: white;
+  color:white;
   border-radius: 5px;
   text-decoration: none;
   font-weight: bold;
   transition: background 0.3s;
 }
+
 .agregar-receta-link:hover {
   background-color: #cfa49e;
   color: white;
@@ -34,21 +34,23 @@
 .loading-text,
 .error-text {
   font-size: 16px;
-  color: #000;
+  color: #000; /* texto negro */
 }
 
 .tabla-wrapper {
+  max-height: 75%;
+  overflow-y: auto;
   overflow-x: auto;
   border: 1px solid #ddd;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: #000; 
 }
 
-/* Tabla */
 .tabla-recetas {
   width: 100%;
-  min-width: 900px;
   border-collapse: collapse;
+  color: #000; /* texto negro en tabla */
 }
 
 .tabla-recetas th,
@@ -57,16 +59,12 @@
   border: 1px solid #ddd;
   text-align: left;
   font-size: 14px;
-  color: #000;
+  color: #000; /* texto negro en celdas */
 }
 
-/* 🔥 fix: encabezado visible y no tapa la fila 1 */
 .tabla-recetas th {
   background-color: #fffaf3;
   font-weight: bold;
-  position: sticky;
-  top: 0;
-  z-index: 2;
 }
 
 .fila-receta:hover {

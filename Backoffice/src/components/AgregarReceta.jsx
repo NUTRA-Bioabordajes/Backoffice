@@ -20,7 +20,7 @@ const AgregarReceta = () => {
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
-    axios.get("http://localhost:3000/categorias", {
+    axios.get("http://localhost:3000/recetas/categorias", {
       headers: { Authorization: `Bearer ${token}` }
     }
 )
