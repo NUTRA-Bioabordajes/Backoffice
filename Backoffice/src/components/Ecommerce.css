@@ -4,6 +4,8 @@
   color: #000;
   height: 75vh; 
   overflow-y: auto; 
+  margin-left: 15%;
+  width: 85%;
 }
 
 .titulo {
@@ -26,6 +28,7 @@
 
 .agregar-producto-link:hover {
   background-color: #cfa49e;
+  color:#fffaf3
 }
 
 .sin-productos-text,
