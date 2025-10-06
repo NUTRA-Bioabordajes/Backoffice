@@ -14,9 +14,11 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "ionicons": "^8.0.13",
     "pg": "^8.16.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-ionicons": "^4.2.1",
     "react-router-dom": "^7.6.2",
     "react-select": "^5.10.2"
   },

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import './AgregarPaciente.css'; 
+import './AgregarReceta.css'; 
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
@@ -138,8 +138,6 @@ const AgregarReceta = () => {
           />
           {errors.idCategoria && <p className="error">{errors.idCategoria}</p>}
         </div>
-
-       
 
         <div className="campo">
           <label>Foto (URL)</label>

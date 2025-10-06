@@ -103,14 +103,3 @@ const EditarProducto = () => {
 };
 
 export default EditarProducto;
-
-
-/*EditarProducto.jsx?t=1759501623246:27 
- GET http://localhost:3000/productos/2 404 (Not Found)
-
-EditarProducto.jsx?t=1759501623246:34 Error: Error al traer producto
-    at EditarProducto.jsx?t=1759501623246:32:26
-EditarProducto.jsx?t=1759501623246:27 
- GET http://localhost:3000/productos/2 404 (Not Found)
-EditarProducto.jsx?t=1759501623246:34 Error: Error al traer producto
-    at EditarProducto.jsx?t=1759501623246:32:26*/ 

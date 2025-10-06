@@ -2,9 +2,8 @@
   background-color: #faf6f2;
   padding: 2rem;
   border-radius: 12px;
-  width: 1200px;
-  max-width: 1200px; 
-  margin: 2rem auto;
+  width: 85%;
+  margin-left: 15%;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   font-family: Arial, sans-serif;
 }
@@ -33,7 +32,7 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
-  width: 100%;
+
 }
 
 .editar-paciente-container textarea {
