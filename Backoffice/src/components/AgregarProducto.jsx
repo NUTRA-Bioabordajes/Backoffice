@@ -5,14 +5,17 @@ import axios from "axios";
 
 
 const AgregarProducto = () => {
-  const [formData, setFormData] = useState({
-    nombre: "",
-    precio: "",
-    descripcion: "",
-    foto: "",
-    fotoTabla: "",
-    cantidad: ""
-  });
+ const [formData, setFormData] = useState({
+  Nombre: "",
+  Precio: "",
+  Descripcion: "",
+  Foto: "",
+  FotoTabla: "",
+  Cantidad: "",
+  Stock: 0,
+  Favoritos: 0
+});
+
 
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
@@ -28,16 +31,16 @@ const AgregarProducto = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.nombre) newErrors.nombre = "El nombre es obligatorio";
-    if (!formData.precio) {
-      newErrors.precio = "El precio es obligatorio";
-    } else if (isNaN(parseFloat(formData.precio))) {
-      newErrors.precio = "El precio debe ser un número";
+    if (!formData.Nombre) newErrors.Nombre = "El nombre es obligatorio";
+    if (!formData.Precio) {
+      newErrors.Precio = "El precio es obligatorio";
+    } else if (isNaN(parseFloat(formData.Precio))) {
+      newErrors.Precio = "El precio debe ser un número";
     }
-    if (!formData.descripcion) newErrors.descripcion = "La descripción es obligatoria";
-    if (!formData.foto) newErrors.foto = "La foto es obligatoria";
-    if (!formData.fotoTabla) newErrors.fotoTabla = "La foto de tabla es obligatoria";
-    if (!formData.cantidad) newErrors.cantidad = "La cantidad es obligatoria";
+    if (!formData.Descripcion) newErrors.Descripcion = "La descripción es obligatoria";
+    if (!formData.Foto) newErrors.Foto = "La foto es obligatoria";
+    if (!formData.FotoTabla) newErrors.FotoTabla = "La foto de tabla es obligatoria";
+    if (!formData.Cantidad) newErrors.Cantidad = "La cantidad es obligatoria";
     return newErrors;
   };
 
@@ -63,7 +66,7 @@ const AgregarProducto = () => {
 
       setSuccess(true);
       setTimeout(() => {
-        navigate("/dashboard/productos");
+        navigate("/dashboard/ecommerce");
       }, 900);
     } catch (err) {
       setErrors({
@@ -82,13 +85,13 @@ const AgregarProducto = () => {
           <label>Nombre</label>
           <input
             type="text"
-            name="nombre"
+            name="Nombre"
             className="input"
-            value={formData.nombre}
+            value={formData.Nombre}
             onChange={handleChange}
             required
           />
-          {errors.nombre && <p className="error">{errors.nombre}</p>}
+          {errors.Nombre && <p className="error">{errors.Nombre}</p>}
         </div>
 
         <div className="campo">
@@ -97,67 +100,67 @@ const AgregarProducto = () => {
             type="number"
             step="0.01"
             min="0"
-            name="precio"
+            name="Precio"
             className="input"
-            value={formData.precio}
+            value={formData.Precio}
             onChange={handleChange}
             required
           />
-          {errors.precio && <p className="error">{errors.precio}</p>}
+          {errors.Precio && <p className="error">{errors.Precio}</p>}
         </div>
 
         <div className="campo">
           <label>Descripción</label>
           <textarea
-            name="descripcion"
+            name="Descripcion"
             className="input"
-            value={formData.descripcion}
+            value={formData.Descripcion}
             onChange={handleChange}
             rows="2"
             required
           />
-          {errors.descripcion && <p className="error">{errors.descripcion}</p>}
+          {errors.Descripcion && <p className="error">{errors.Descripcion}</p>}
         </div>
 
         <div className="campo">
           <label>Foto (URL)</label>
           <input
             type="text"
-            name="foto"
+            name="Foto"
             className="input"
-            value={formData.foto}
+            value={formData.Foto}
             onChange={handleChange}
             placeholder="https://..."
             required
           />
-          {errors.foto && <p className="error">{errors.foto}</p>}
+          {errors.Foto && <p className="error">{errors.Foto}</p>}
         </div>
 
         <div className="campo">
           <label>Foto Tabla (URL)</label>
           <input
             type="text"
-            name="fotoTabla"
+            name="FotoTabla"
             className="input"
-            value={formData.fotoTabla}
+            value={formData.FotoTabla}
             onChange={handleChange}
             placeholder="https://..."
             required
           />
-          {errors.fotoTabla && <p className="error">{errors.fotoTabla}</p>}
+          {errors.FotoTabla && <p className="error">{errors.FotoTabla}</p>}
         </div>
 
         <div className="campo">
           <label>Cantidad de Stock</label>
           <input
             type="text"
-            name="cantidad"
+            name="Cantidad"
             className="input"
-            value={formData.cantidad}
+            value={formData.Cantidad}
             onChange={handleChange}
             required
           />
-          {errors.cantidad && <p className="error">{errors.cantidad}</p>}
+          {errors.Cantidad && <p className="error">{errors.Cantidad}</p>}
         </div>
 
         {errors.submit && <p className="error">{errors.submit}</p>}
