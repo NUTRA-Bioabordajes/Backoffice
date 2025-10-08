@@ -5,8 +5,8 @@ const Home = () => {
 
     return(
     <>
-        
-        <h1>HOME</h1>
+        <img src="/src/assets/images/logo.png" alt="Logo" />
+        <h1 style={{ textAlign: "center" }}>HOME</h1>
     </>
 
     )
