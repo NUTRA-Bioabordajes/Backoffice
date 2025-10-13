@@ -1,13 +1,17 @@
 .editar-paciente-container {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 75vh; 
+  overflow-y: auto; 
   background-color: #faf6f2;
   padding: 2rem;
   border-radius: 12px;
   width: 100%;
-  margin-top: 110%;
-  margin-left: 15%;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   font-family: Arial, sans-serif;
 }
+
 
 .editar-paciente-container h1 {
   text-align: center;
@@ -19,7 +23,6 @@
 .editar-paciente-container form {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
 }
 
 .editar-paciente-container label {

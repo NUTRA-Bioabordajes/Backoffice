@@ -173,7 +173,7 @@ const EditarPaciente = () => {
 
   return (
     <div className="editar-paciente-container">
-      <h1 style={{ textAlign: "center" }}>Editar paciente</h1>
+      <h1>Editar paciente</h1>
 
       <form onSubmit={handleSubmit}>
         <label>Nombre:</label>

@@ -2,17 +2,14 @@
 #root {
   display: flex;
   flex-direction: row;
-  width: 100%;
-  min-height: 100vh;
   font-family: Arial, sans-serif;
 }
 
 
 /* Contenido principal */
 main {
-  margin-left: 15%;
-  width: 80%;
-  padding: 20px;
+  display: flex;
+  flex-direction: row;
   box-sizing: border-box;
 }
 

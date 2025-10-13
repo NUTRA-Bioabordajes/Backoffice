@@ -1,12 +1,17 @@
 .productos-container {
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2%;
   background-color: #fffaf3;
   color: #000;
   height: 75vh; 
   overflow-y: auto; 
-  margin-left: 15%;
-  /*width: 85%;*/
+  border-radius: 2%;
 }
+
+
 
 .titulo {
   font-size: 24px;

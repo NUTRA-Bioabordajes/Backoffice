@@ -1,3 +1,14 @@
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 75vh;
+  overflow-y: auto;
+  border-radius: 2%;
+  padding: 2%;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
 body {
   background-color: #f8f3ea;
   font-family: Arial, sans-serif;
@@ -5,7 +16,6 @@ body {
   min-height: 100vh;
   overflow-y: auto;
 }
-
 
 .campo {
   margin-bottom: 1.5rem;
@@ -109,12 +119,3 @@ h3 {
   cursor: not-allowed;
 }
 
-.form-container {
-  margin-left: 15%;
-  max-width: 85%;
-  height: 90vh;
-  overflow-y: auto;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
