@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IonIcon } from '@ionic/react'; 
 import "./Recetas.css";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
 
 import { trashOutline } from 'ionicons/icons'; 
 <IonIcon icon={trashOutline} />
@@ -115,15 +117,21 @@ const VerReceta = () => {
                     )}
                   </td>
                   <td>
-                    <button
-                      className="btn-editar"
-                      onClick={() => handleEdit(r.idReceta)}
-                    >
-                      Editar
-                    </button>
-                    <button className="btn-eliminar" onClick={() => handleDelete(r.idReceta)}> <ion-icon name="trash-outline"></ion-icon></button>
-                    
-                  </td>
+                                        <div className="botones">
+                                          <button
+                                          className="btn-editar"
+                                          onClick={() => handleEdit(r.idReceta)}
+                                        >
+                                        <FaRegEdit />
+                                        </button>
+                                        <button
+                                          className="btn-eliminar"
+                                          onClick={() => handleDelete(r.idReceta)}
+                                        >
+                                        <FaRegTrashAlt />
+                                        </button>
+                                        </div>
+                                      </td>
                 </tr>
               ))}
             </tbody>

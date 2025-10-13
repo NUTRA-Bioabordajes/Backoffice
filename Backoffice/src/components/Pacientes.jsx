@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Pacientes.css";
-
+import { FaRegTrashAlt } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
 
 const Pacientes = () => {
   const [pacientes, setPacientes] = useState([]);
@@ -120,18 +121,20 @@ const Pacientes = () => {
                     )}
                   </td>
                   <td>
-                    <button
+                    <div className="botones">
+                      <button
                       className="btn-editar"
                       onClick={() => handleEdit(p.id)}
                     >
-                      Editar
+                    <FaRegEdit />
                     </button>
                     <button
                       className="btn-eliminar"
                       onClick={() => handleDelete(p.id)}
                     >
-                      Eliminar
+                    <FaRegTrashAlt />
                     </button>
+                    </div>
                   </td>
                 </tr>
               ))}
