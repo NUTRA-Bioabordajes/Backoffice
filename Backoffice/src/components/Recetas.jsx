@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { IonIcon } from '@ionic/react'; 
 import "./Recetas.css";
+
+import { trashOutline } from 'ionicons/icons'; 
+<IonIcon icon={trashOutline} />
+
+
 
 const VerReceta = () => {
   const [recetas, setRecetas] = useState([]);
@@ -36,6 +42,7 @@ const VerReceta = () => {
         setLoading(false);
       });
   };
+  
 
   // 🔴 Eliminar receta
   const handleDelete = async (idReceta) => {
@@ -114,12 +121,8 @@ const VerReceta = () => {
                     >
                       Editar
                     </button>
-                    <button
-                      className="btn-eliminar"
-                      onClick={() => handleDelete(r.idReceta)}
-                    >
-                      Eliminar
-                    </button>
+                    <button className="btn-eliminar" onClick={() => handleDelete(r.idReceta)}> <ion-icon name="trash-outline"></ion-icon></button>
+                    
                   </td>
                 </tr>
               ))}
