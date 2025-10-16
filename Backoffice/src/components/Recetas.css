@@ -89,3 +89,18 @@ border-radius: 3%;
   background-color:#fcf9f3;
 
 }
+.botones{
+  display: flex;
+  flex-direction: row;
+}
+.btn-editar, .btn-eliminar{
+  background-color:#fcf9f3;
+
+}
+
+  
+.btn-editar svg, .btn-eliminar svg {
+  width:fit-content;
+  height:fit-content;
+  color: #333;
+}

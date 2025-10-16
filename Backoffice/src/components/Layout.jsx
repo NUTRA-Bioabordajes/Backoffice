@@ -11,7 +11,7 @@ const Layout = () => {
                 <Link to="/dashboard/home">Home</Link>
                 <Link to="/dashboard/recetas">Recetas</Link>
                 <Link to="/dashboard/pacientes">Pacientes</Link>
-                <Link to="/dashboard/ecommerce">E-Commerce</Link>
+                <Link to="/dashboard/novedades">Novedades</Link>
             </nav>
             <Outlet />
         </>

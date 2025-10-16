@@ -6,16 +6,13 @@ import Layout from './components/Layout';
 import Home from './components/Home';
 import Pacientes from './components/Pacientes';
 import Recetas from './components/Recetas';
-import ECommerce from './components/ECommerce';
 import AgregarPaciente from './components/AgregarPaciente';
 import AgregarReceta from './components/AgregarReceta';
-import AgregarProducto from './components/AgregarProducto';
 import EditarReceta from './components/EditarReceta';
 import EditarPaciente from './components/EditarPaciente';
-import EditarProducto from './components/EditarProducto';
-/*import dotenv from 'dotenv';
+import Novedades from './components/Novedades';
+import AgregarNovedades from './components/AgregarNovedades';
 
-dotenv.config();*/
 
 
 function App() {
@@ -32,13 +29,13 @@ function App() {
           <Route path="home" element={<Home />} />
           <Route path="pacientes" element={<Pacientes />} />
           <Route path="recetas" element={<Recetas />} />
-          <Route path="ecommerce" element={<ECommerce />} />
           <Route path="agregarPaciente" element={<AgregarPaciente />} />
           <Route path="agregarReceta" element={<AgregarReceta />} />
-          <Route path="agregarProducto" element={<AgregarProducto />} />
           <Route path="editarReceta/:idReceta" element={<EditarReceta />} />
           <Route path="editarPaciente/:idPaciente" element={<EditarPaciente />} />
-          <Route path="editarProducto/:idProducto" element={<EditarProducto />} />
+          <Route path="novedades" element={<Novedades />} />
+          <Route path="agregarNovedades" element={<Novedades />} />
+
 
 
         </Route>

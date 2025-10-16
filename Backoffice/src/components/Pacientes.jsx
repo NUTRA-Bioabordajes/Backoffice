@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Pacientes.css";
-import { FaRegTrashAlt } from "react-icons/fa";
+import { GrStatusGood } from "react-icons/gr";
+import { RxCrossCircled } from "react-icons/rx";
 import { FaRegEdit } from "react-icons/fa";
 
 const Pacientes = () => {
@@ -14,7 +15,6 @@ const Pacientes = () => {
   useEffect(() => {
     fetchPacientes();
   }, []);
-  
 
   const fetchPacientes = () => {
     setLoading(true);
@@ -23,7 +23,7 @@ const Pacientes = () => {
     fetch("http://localhost:3000/usuarios", {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`, // 👈 token
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {
@@ -40,37 +40,52 @@ const Pacientes = () => {
       });
   };
 
-  // 🔴 Eliminar paciente
-  const handleDelete = async (id) => {
-    if (!window.confirm("¿Seguro que quieres eliminar este paciente?")) return;
-
+  const handleToggleActivo = async (id, activoActual) => {
+    const confirmMsg = activoActual
+      ? "¿Seguro que quieres desactivar este paciente?"
+      : "¿Seguro que quieres activar este paciente?";
+    if (!window.confirm(confirmMsg)) return;
+  
     try {
       const token = sessionStorage.getItem("token");
-
+  
+      // Buscar paciente completo en el estado
+      const paciente = pacientes.find((p) => p.id === id);
+      if (!paciente) throw new Error("Paciente no encontrado");
+  
+      // Crear nuevo objeto con activo cambiado
+      const pacienteActualizado = { ...paciente, activo: !activoActual };
+  
       const res = await fetch(`http://localhost:3000/usuarios/${id}`, {
-        method: "DELETE",
+        method: "PUT", // actualizar todo
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // 👈 token
+          Authorization: `Bearer ${token}`,
         },
+        body: JSON.stringify(pacienteActualizado),
       });
-
-      if (!res.ok) throw new Error("Error al eliminar el paciente");
-
-      // Actualizamos el estado sin tener que volver a pedir todo
-      setPacientes(pacientes.filter((p) => p.id !== id));
+  
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Error al actualizar el paciente: ${errorText}`);
+      }
+  
+      // Actualizar estado localmente para reflejar cambio
+      setPacientes((prev) =>
+        prev.map((p) => (p.id === id ? pacienteActualizado : p))
+      );
     } catch (err) {
       alert("Error: " + err.message);
     }
   };
+  
 
-  // 🟡 Editar paciente → redirige a una ruta con el id
   const handleEdit = (id) => {
     navigate(`/dashboard/editarPaciente/${id}`);
   };
 
   if (loading) return <p className="loading-text">Cargando pacientes...</p>;
-  if (error) return <p className="error-text">Error: {error}</p>;
+  if (error) return <p className="error">Error: {error}</p>;
 
   return (
     <div className="pacientes-container">
@@ -95,12 +110,15 @@ const Pacientes = () => {
                 <th>Barrio</th>
                 <th>ID Médico</th>
                 <th>Foto</th>
-                <th>Acciones</th> 
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               {pacientes.map((p) => (
-                <tr key={p.id} className="fila-paciente">
+                <tr
+                  key={p.id}
+                  className={`fila-paciente ${p.activo === false ? "inactivo" : ""}`}
+                >
                   <td>{p.id}</td>
                   <td>{p.dni}</td>
                   <td>{p.nombre}</td>
@@ -121,20 +139,26 @@ const Pacientes = () => {
                     )}
                   </td>
                   <td>
-                    <div className="botones">
-                      <button
+                  <div className="botones">
+                    <button
                       className="btn-editar"
                       onClick={() => handleEdit(p.id)}
+                      disabled={p.activo === false}
                     >
-                    <FaRegEdit />
+                      <FaRegEdit />
                     </button>
                     <button
                       className="btn-eliminar"
-                      onClick={() => handleDelete(p.id)}
+                      onClick={() => handleToggleActivo(p.id, p.activo)}
                     >
-                    <FaRegTrashAlt />
+                      {p.activo ? (
+                        <GrStatusGood color="green" size={20} />
+                      ) : (
+                        <RxCrossCircled color="red" size={20} />
+                      )}
                     </button>
-                    </div>
+                  </div>
+
                   </td>
                 </tr>
               ))}

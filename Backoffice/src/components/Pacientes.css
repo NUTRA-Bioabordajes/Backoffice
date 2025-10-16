@@ -223,3 +223,22 @@ body {
 }
 
   
+.btn-editar svg, .btn-eliminar svg {
+  width:fit-content;
+  height:fit-content;
+  color: #333;
+}
+.fila-paciente.inactivo {
+  background-color: #f8d7da !important;
+  color: #721c24 !important;
+}
+
+.fila-paciente.inactivo:hover {
+  background-color: #f8d7da !important;
+  color: #721c24 !important;
+  cursor: default;
+}
+
+.fila-paciente.inactivo:nth-child(even) {
+  background-color: #f8d7da !important;
+}
