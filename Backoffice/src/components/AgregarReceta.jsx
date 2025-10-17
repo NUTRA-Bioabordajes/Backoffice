@@ -6,34 +6,44 @@ import Select from "react-select";
 
 const AgregarReceta = () => {
   const [formData, setFormData] = useState({
-    nombre: "",
-    descripcion: "",
-    elaboracion: "",
+    Nombre: "",
+    Descripcion: "",
+    Elaboracion: "",
     idCategoria: "",
-    foto: ""
+    Foto: ""
   });
 
   const [categoriasOptions, setCategoriasOptions] = useState([]);
   const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
+  // Cargar categorías
   useEffect(() => {
     const token = sessionStorage.getItem("token");
-    axios.get("http://localhost:3000/recetas/categorias", {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-)
-      .then(res => {
-        const options = res.data.map(c => ({
+
+    axios
+      .get("http://localhost:3000/recetas/categorias", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        const options = res.data.map((c) => ({
           value: String(c.idCategoria),
-          label: c.nombre
+          label:
+            c.Nombre ||
+            c.nombre ||
+            c.NombreCategoria ||
+            c.nombreCategoria ||
+            `Categoría ${c.idCategoria}`,
         }));
         setCategoriasOptions(options);
       })
-      .catch(err => console.error("Error cargando categorías:", err));
+      .catch((err) => {
+        console.error("Error cargando categorías:", err);
+        setCategoriasOptions([]);
+      });
   }, []);
 
+  // Manejar cambios en inputs y textarea
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -42,6 +52,7 @@ const AgregarReceta = () => {
     }));
   };
 
+  // Manejar selección de categoría
   const handleCategoriaChange = (selectedOption) => {
     setFormData(prev => ({
       ...prev,
@@ -49,37 +60,51 @@ const AgregarReceta = () => {
     }));
   };
 
+  // Validación
   const validate = () => {
     const newErrors = {};
-    if (!formData.nombre) newErrors.nombre = "El nombre es obligatorio";
-    if (!formData.descripcion) newErrors.descripcion = "La descripción es obligatoria";
-    if (!formData.elaboracion) newErrors.elaboracion = "La elaboración es obligatoria";
+    if (!formData.Nombre) newErrors.Nombre = "El nombre es obligatorio";
+    if (!formData.Descripcion) newErrors.Descripcion = "La descripción es obligatoria";
+    if (!formData.Elaboracion) newErrors.Elaboracion = "La elaboración es obligatoria";
     if (!formData.idCategoria) newErrors.idCategoria = "Debe seleccionar una categoría";
     return newErrors;
   };
 
+  // Enviar formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
 
-    try {
-      // Enviar datos al backend
-      await axios.post("http://localhost:3000/recetas/nuevaReceta", {
-        ...formData,
-        idCategoria: Number(formData.idCategoria),
-      });
+    const token = sessionStorage.getItem("token");
 
-      setSuccess(true);
-      setTimeout(() => {
-        navigate("/dashboard/recetas");
-      }, 800);
+    try {
+      await axios.post(
+        "http://localhost:3000/recetas",
+        {
+          Nombre: formData.Nombre,
+          Descripcion: formData.Descripcion,
+          Elaboracion: formData.Elaboracion,
+          idCategoria: Number(formData.idCategoria),
+          Foto: formData.Foto || null,
+          Favoritos: false
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+
+      // Alert al estilo de EditarPaciente
+      alert("Receta creada con éxito ✅");
+      navigate("/dashboard/recetas");
     } catch (err) {
+      console.error("Error creando receta:", err);
       setErrors({
-        submit: err.response?.data?.message || "Error al crear la receta. Intente nuevamente."
+        submit:
+          err.response?.data?.message || "Error al crear la receta. Intente nuevamente."
       });
-      setSuccess(false);
+      alert("Error al crear la receta: " + (err.response?.data?.message || err.message));
     }
   };
 
@@ -92,39 +117,39 @@ const AgregarReceta = () => {
           <label>Nombre de la receta</label>
           <input
             type="text"
-            name="nombre"
+            name="Nombre"
             className="input"
-            value={formData.nombre}
+            value={formData.Nombre}
             onChange={handleChange}
             required
           />
-          {errors.nombre && <p className="error">{errors.nombre}</p>}
+          {errors.Nombre && <p className="error">{errors.Nombre}</p>}
         </div>
 
         <div className="campo">
           <label>Descripción</label>
           <textarea
-            name="descripcion"
+            name="Descripcion"
             className="input"
-            value={formData.descripcion}
+            value={formData.Descripcion}
             onChange={handleChange}
             rows="2"
             required
           />
-          {errors.descripcion && <p className="error">{errors.descripcion}</p>}
+          {errors.Descripcion && <p className="error">{errors.Descripcion}</p>}
         </div>
 
         <div className="campo">
           <label>Elaboración</label>
           <textarea
-            name="elaboracion"
+            name="Elaboracion"
             className="input"
-            value={formData.elaboracion}
+            value={formData.Elaboracion}
             onChange={handleChange}
             rows="4"
             required
           />
-          {errors.elaboracion && <p className="error">{errors.elaboracion}</p>}
+          {errors.Elaboracion && <p className="error">{errors.Elaboracion}</p>}
         </div>
 
         <div className="campo">
@@ -143,9 +168,9 @@ const AgregarReceta = () => {
           <label>Foto (URL)</label>
           <input
             type="text"
-            name="foto"
+            name="Foto"
             className="input"
-            value={formData.foto}
+            value={formData.Foto}
             onChange={handleChange}
             placeholder="https://..."
           />
@@ -154,7 +179,6 @@ const AgregarReceta = () => {
         {errors.submit && <p className="error">{errors.submit}</p>}
 
         <button type="submit" className="boton-enviar">Crear Receta</button>
-        {success && <div>¡Receta creada exitosamente!</div>}
       </form>
     </div>
   );

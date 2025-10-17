@@ -14,7 +14,7 @@ border-radius: 3%;
 .titulo {
   font-size: 24px;
   margin-bottom: 15px;
-  color: #000; /* texto negro */
+  color: #000;
 }
 
 .agregar-receta-link {

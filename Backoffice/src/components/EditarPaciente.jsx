@@ -123,31 +123,43 @@ const EditarPaciente = () => {
 
       // Si el servidor usa mayúsculas, construimos el payload en ese formato
       let payloadToSend;
-      if (serverUsesUppercase) {
-        payloadToSend = {
-          id: paciente.id,
-          Nombre: paciente.nombre,
-          Apellido: paciente.apellido,
-          DNI: paciente.dni,
-          Diagnostico: paciente.diagnostico,
-          Sexo: paciente.sexo,
-          Barrio: paciente.barrio,
-          idMedico: paciente.idMedico, // si el servidor espera IdMedico podés cambiarlo acá
-          Foto: paciente.foto,
-        };
-      } else {
-        payloadToSend = {
-          id: paciente.id,
-          nombre: paciente.nombre,
-          apellido: paciente.apellido,
-          dni: paciente.dni,
-          diagnostico: paciente.diagnostico,
-          sexo: paciente.sexo,
-          barrio: paciente.barrio,
-          idMedico: paciente.idMedico,
-          foto: paciente.foto,
-        };
-      }
+if (serverUsesUppercase) {
+  payloadToSend = {
+    id: paciente.id,
+    Nombre: paciente.nombre,
+    Apellido: paciente.apellido,
+    DNI: paciente.dni,
+    Diagnostico: paciente.diagnostico,
+    Sexo: paciente.sexo,
+    Barrio: paciente.barrio,
+    idMedico: paciente.idMedico,
+    Foto: paciente.foto,
+
+    // Campos requeridos por la API
+    Password: paciente.password || null,
+    Activo: paciente.activo ?? true,
+    Vencimiento: paciente.vencimiento || null,
+    Certificado: paciente.certificado ?? false,
+  };
+} else {
+  payloadToSend = {
+    id: paciente.id,
+    nombre: paciente.nombre,
+    apellido: paciente.apellido,
+    dni: paciente.dni,
+    diagnostico: paciente.diagnostico,
+    sexo: paciente.sexo,
+    barrio: paciente.barrio,
+    idMedico: paciente.idMedico,
+    foto: paciente.foto,
+
+    // Campos requeridos por la API
+    password: paciente.password || null,
+    activo: paciente.activo ?? true,
+    vencimiento: paciente.vencimiento || null,
+    certificado: paciente.certificado ?? false,
+  };
+}
 
       const res = await fetch(`http://localhost:3000/usuarios/${id}`, {
         method: "PUT",
