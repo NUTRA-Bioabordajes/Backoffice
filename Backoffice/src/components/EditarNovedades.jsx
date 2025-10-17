@@ -4,7 +4,7 @@ import { IonIcon } from '@ionic/react';
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaRegEdit } from "react-icons/fa";
 
-const AgregarNovedades = () => {
+const EditarNovedades = () => {
 
     return(
     <>
@@ -15,4 +15,4 @@ const AgregarNovedades = () => {
     )
         
 }
-export default AgregarNovedades;
+export default EditarNovedades;

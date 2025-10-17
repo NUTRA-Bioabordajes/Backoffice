@@ -12,6 +12,8 @@ import EditarReceta from './components/EditarReceta';
 import EditarPaciente from './components/EditarPaciente';
 import Novedades from './components/Novedades';
 import AgregarNovedades from './components/AgregarNovedades';
+import EditarNovedades from './components/EditarNovedades';
+
 
 
 
@@ -34,7 +36,9 @@ function App() {
           <Route path="editarReceta/:idReceta" element={<EditarReceta />} />
           <Route path="editarPaciente/:idPaciente" element={<EditarPaciente />} />
           <Route path="novedades" element={<Novedades />} />
-          <Route path="agregarNovedades" element={<Novedades />} />
+          <Route path="agregarNovedades" element={<AgregarNovedades />} />
+          <Route path="editarNovedades/:idNovedad" element={<EditarNovedades />} />
+
 
 
 
