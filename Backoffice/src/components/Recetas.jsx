@@ -117,21 +117,21 @@ const VerReceta = () => {
                     )}
                   </td>
                   <td>
-                                        <div className="botones">
-                                          <button
-                                          className="btn-editar"
-                                          onClick={() => handleEdit(r.idReceta)}
-                                        >
-                                        <FaRegEdit />
-                                        </button>
-                                        <button
-                                          className="btn-eliminar"
-                                          onClick={() => handleDelete(r.idReceta)}
-                                        >
-                                        <FaRegTrashAlt />
-                                        </button>
-                                        </div>
-                                      </td>
+                    <div className="botones">
+                      <button
+                      className="btn-editar"
+                      onClick={() => handleEdit(r.idReceta)}
+                    >
+                    <FaRegEdit />
+                    </button>
+                    <button
+                      className="btn-eliminar"
+                      onClick={() => handleDelete(r.idReceta)}
+                    >
+                    <FaRegTrashAlt />
+                    </button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

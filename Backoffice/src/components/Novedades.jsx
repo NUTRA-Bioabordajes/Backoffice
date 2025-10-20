@@ -98,15 +98,15 @@ const Novedades = () => {
   return (
     <div className="novedades-container">
       <h1 className="titulo">Novedades</h1>
-
+  
       <Link to="/dashboard/agregarNovedades" className="agregar-novedad-link">
         + Agregar Novedad
       </Link>
-
+  
       {novedades.length === 0 ? (
         <p className="sin-novedades-text">No hay novedades registradas</p>
       ) : (
-        <div className="tabla-wrapper-novedades">
+        <div className="tabla-wrapper-novedades"> {/* <-- Scroll solo aquí */}
           <table className="tabla-novedades">
             <thead>
               <tr>
@@ -124,7 +124,7 @@ const Novedades = () => {
               {novedades.map((n) => (
                 <tr
                   key={n.idNovedad}
-                  className={`fila-novedad ${n.activo === false ? "inactiva" : ""}`}
+                  className={`fila-novedad ${!n.activo ? "inactiva" : ""}`}
                 >
                   <td>{n.idNovedad}</td>
                   <td>{n.nombre}</td>
@@ -140,23 +140,15 @@ const Novedades = () => {
                       "Sin flyer"
                     )}
                   </td>
-                  <td>
-                    {n.created_at
-                      ? new Date(n.created_at).toLocaleDateString()
-                      : "-"}
-                  </td>
-                  <td>
-                    {n.fechaBaja
-                      ? new Date(n.fechaBaja).toLocaleDateString()
-                      : "-"}
-                  </td>
+                  <td>{n.created_at ? new Date(n.created_at).toLocaleDateString() : "-"}</td>
+                  <td>{n.fechaBaja ? new Date(n.fechaBaja).toLocaleDateString() : "-"}</td>
                   <td>{n.activo ? "Sí" : "No"}</td>
                   <td>
                     <div className="botones">
                       <button
                         className="btn-editar"
                         onClick={() => handleEdit(n.idNovedad)}
-                        disabled={n.activo === false}
+                        disabled={!n.activo}
                       >
                         <FaRegEdit />
                       </button>
@@ -180,6 +172,7 @@ const Novedades = () => {
       )}
     </div>
   );
+  
 };
 
 export default Novedades;

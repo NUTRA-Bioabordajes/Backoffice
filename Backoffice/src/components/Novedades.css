@@ -1,37 +1,60 @@
+/* Contenedor principal */
 .novedades-container {
     display: flex;
     flex-direction: column;
     align-items: center;  
-    justify-content: center; 
+    justify-content: flex-start; 
     border-radius: 2%;
     font-family: Arial, sans-serif;
     background-color: #fcf9f3;
     color: #333;
-    height: 60vh;
-    max-width: 80%;
+    min-height: 60vh;
+    max-width: 95%;
     margin: 0 auto;
-}
+    padding: 10px;
+  }
   
-.flyer-novedad {
+  /* Tabla con scroll independiente */
+  .tabla-wrapper-novedades {
+    max-height: 60vh; 
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    color: #000;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  /* Flyers */
+  .flyer-novedad {
     max-width: 25%; 
     max-height: 25%;
     display: block;  
-}
+    margin: 0 auto;
+  }
   
-.titulo-novedades {
+  /* Títulos */
+  .titulo-novedades {
     font-weight: 600;
     font-size: 1.8rem;
-}
+    text-align: center;
+    margin-bottom: 15px;
+  }
   
-.loading-text,
-.error-text,
-.sin-novedades-text {
+  /* Mensajes */
+  .loading-text,
+  .error-text,
+  .sin-novedades-text {
     font-weight: 500;
     margin-top: 10px;
     font-size: 1rem;
-}
+    text-align: center;
+  }
   
-.tabla-wrapper-novedades {
+  /* Tabla wrapper */
+  .tabla-wrapper-novedades {
     max-height: 75%;
     overflow-y: auto;
     overflow-x: auto;
@@ -39,96 +62,97 @@
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     color: #000;
-    width: 90%;  
-    margin: 0 auto;  
-}
+    width: 100%;  
+    margin: 0 auto 20px auto;
+  }
   
-.tabla-novedades {
+  /* Tabla */
+  .tabla-novedades {
     width: 100%;  
     border-collapse: collapse;
-    margin-top: 10px;  /* Reducido de 20px para menos espacio con el título */
+    margin-top: 10px;
     font-size: 0.9rem;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    table-layout: fixed;  
-}
+    table-layout: fixed;
+  }
   
-.tabla-novedades thead tr {
+  /* Encabezado */
+  .tabla-novedades thead tr {
     background-color: #f5f0e7;
     font-weight: 700;
     font-size: 0.85rem;
     color: #333;
     text-align: left;
-}
+  }
   
-.tabla-novedades th,
-.tabla-novedades td {
-    padding: 12px 15px;  
+  /* Celdas */
+  .tabla-novedades th,
+  .tabla-novedades td {
+    padding: 8px 10px;
     border-bottom: 1px solid #e3ded3;
     text-align: left;
     overflow: hidden;  
     white-space: nowrap;  
-}
+    text-overflow: ellipsis;
+  }
   
-/* Especificar ancho para la columna de la foto (cuarta columna) */
-.tabla-novedades th:nth-child(4),
-.tabla-novedades td:nth-child(4) {
-    width: 150px;  
-    max-width: 150px;  
-    text-overflow: ellipsis;  
-}
+  /* Columna de flyer */
+  .tabla-novedades th:nth-child(4),
+  .tabla-novedades td:nth-child(4) {
+    width: 120px;  
+    max-width: 120px;  
+  }
   
-.tabla-novedades tbody tr:nth-child(even) {
+  /* Filas alternadas */
+  .tabla-novedades tbody tr:nth-child(even) {
     background-color: #fdf9f3;
-}
+  }
   
-.tabla-novedades tbody tr:hover {
+  /* Hover */
+  .tabla-novedades tbody tr:hover {
     background-color: #f1ede7;
     transition: background-color 0.2s ease;
-}
+  }
   
-.btn-ver,
-.btn-editar-novedad,
-.btn-eliminar-novedad {
+  /* Botones */
+  .btn-ver,
+  .btn-editar-novedad,
+  .btn-eliminar-novedad {
     background-color: #fcf9f3;
     border: none;
     border-radius: 6px;
     padding: 6px 10px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-}
+  }
   
-.btn-ver:hover,
-.btn-editar-novedad:hover,
-.btn-eliminar-novedad:hover {
+  .btn-ver:hover,
+  .btn-editar-novedad:hover,
+  .btn-eliminar-novedad:hover {
     background-color: #f1ede7;
-}
+  }
   
-.btn-ver svg,
-.btn-editar-novedad svg,
-.btn-eliminar-novedad svg {
+  .btn-ver svg,
+  .btn-editar-novedad svg,
+  .btn-eliminar-novedad svg {
     width: 18px;
     height: 18px;
     color: #333;
-}
+  }
   
-.fila-novedad.inactiva {
+  /* Filas inactivas */
+  .fila-novedad.inactiva {
     background-color: #f8d7da !important;
     color: #721c24 !important;
-}
+  }
   
-.fila-novedad.inactiva:hover {
+  .fila-novedad.inactiva:hover {
     background-color: #f8d7da !important;
     color: #721c24 !important;
     cursor: default;
-}
+  }
   
-.fila-novedad.inactiva:nth-child(even) {
-    background-color: #f8d7da !important;
-}
-  
-.agregar-novedad-link {
+  /* Link agregar */
+  .agregar-novedad-link {
     display: inline-block;
     margin-bottom: 15px;
     padding: 8px 15px;
@@ -138,27 +162,20 @@
     text-decoration: none;
     font-weight: bold;
     transition: background 0.3s;
-}
+  }
   
-.agregar-novedad-link:hover {
+  .agregar-novedad-link:hover {
     background-color: #cfa49e;
     color: #f2f2f2;
-}
+  }
   
-@media (max-width: 768px) {
-    .tabla-novedades {
-      font-size: 0.8rem;
-    }
-    .titulo-novedades {
-      font-size: 1.5rem;
-    }
-}
-.editar-container {
+  /* Formulario editar/crear novedad */
+  .editar-container {
     background-color: #fffaf3;
-    padding: 30px;
+    padding: 20px;
     border-radius: 10px;
     max-width: 600px;
-    margin: 40px auto;
+    margin: 20px auto;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
   
@@ -187,7 +204,10 @@
   
   .botones-form {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
   }
   
   .btn-guardar {
@@ -214,5 +234,53 @@
   
   .btn-cancelar:hover {
     background-color: #bbb;
+  }
+  
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .flyer-novedad {
+      max-width: 35%;
+      max-height: 35%;
+    }
+    .tabla-novedades th:nth-child(4),
+    .tabla-novedades td:nth-child(4) {
+      width: 100px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .tabla-novedades {
+      font-size: 0.75rem;
+    }
+    .titulo-novedades {
+      font-size: 1.5rem;
+    }
+    .flyer-novedad {
+      max-width: 50%;
+      max-height: 50%;
+    }
+    .tabla-wrapper-novedades {
+      width: 100%;
+    }
+    .btn-guardar, .btn-cancelar {
+      width: 48%;
+    }
+    .botones-form {
+      flex-direction: column;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .flyer-novedad {
+      max-width: 70%;
+      max-height: 70%;
+    }
+    .tabla-novedades th,
+    .tabla-novedades td {
+      padding: 6px 8px;
+    }
+    .titulo-novedades {
+      font-size: 1.2rem;
+    }
   }
   
