@@ -1,33 +1,56 @@
 .editar-paciente-container {
-  display:flex;
+  display: flex;
   flex-direction: column;
-  justify-content: center;
-  height: 75vh; 
-  overflow-y: auto; 
   background-color: #faf6f2;
-  padding: 2rem;
-  border-radius: 12px;
-  width: 100%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  font-family: Arial, sans-serif;
+  border-radius: 1rem;
+  box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.08);
+  font-family: "Segoe UI", Arial, sans-serif;
+  height: 75vh;
+  overflow: hidden;
 }
 
-
+/* Header fijo */
 .editar-paciente-container h1 {
+  position: sticky;
+  top: 0;
+  background-color: #faf6f2;
   text-align: center;
-  margin-bottom: 1.5rem;
-  color: #333;
+  padding: 1.2rem 0;
+  margin: 0;
   font-size: 1.8rem;
+  color: #333;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+  z-index: 10;
 }
 
+/* Contenido scrolleable */
 .editar-paciente-container form {
   display: flex;
   flex-direction: column;
+  padding: 2rem 3rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #999 #eee;
 }
 
+/* Scrollbar personalizada */
+.editar-paciente-container form::-webkit-scrollbar {
+  width: 8px;
+}
+.editar-paciente-container form::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border-radius: 4px;
+}
+.editar-paciente-container form::-webkit-scrollbar-track {
+  background-color: #eee;
+}
+
+/* Labels e inputs */
 .editar-paciente-container label {
   font-weight: bold;
   color: #444;
+  margin-top: 1rem;
 }
 
 .editar-paciente-container input,
@@ -36,7 +59,8 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
-
+  margin-top: 0.3rem;
+  background-color: #fff;
 }
 
 .editar-paciente-container textarea {
@@ -44,6 +68,7 @@
   min-height: 100px;
 }
 
+/* Botones */
 .btn-guardar {
   background-color: #b5838d;
   color: #fff;
@@ -53,18 +78,25 @@
   font-size: 0.95rem;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-top: 1.5rem;
 }
 
 .btn-guardar:hover {
   background-color: #9a6a74;
 }
+
 .btn-cancelar {
   background-color: transparent;
-  border: 1px solid #aaa;
-  color: #333;
-  padding: 0.7rem 1.5rem;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+    border: 0.1rem solid #aaa;
+    color: #333;
+    border-radius: 0.8rem;
+    font-size: 1rem;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-cancelar:hover {
+  background-color: #f0e8e4;
 }

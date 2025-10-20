@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import "./Novedades.css";
+import "./EditarNovedades.css";
 
 const EditarNovedades = () => {
-  const { id } = useParams(); // idNovedad
+  const { id } = useParams(); 
   const navigate = useNavigate();
   const [novedad, setNovedad] = useState({
     idNovedad: "", // importante: coincidimos con lo que espera el backend
