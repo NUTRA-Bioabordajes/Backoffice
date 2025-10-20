@@ -153,3 +153,66 @@
       font-size: 1.5rem;
     }
 }
+.editar-container {
+    background-color: #fffaf3;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: 40px auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .form-novedad {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .form-group label {
+    font-weight: bold;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  
+  textarea {
+    min-height: 100px;
+  }
+  
+  .botones-form {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .btn-guardar {
+    background-color: #E0CAC7;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .btn-cancelar {
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color: #ccc;
+    color: #333;
+    border-radius: 5px;
+  }
+  
+  .btn-guardar:hover {
+    background-color: #cfa49e;
+  }
+  
+  .btn-cancelar:hover {
+    background-color: #bbb;
+  }
+  

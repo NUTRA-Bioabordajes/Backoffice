@@ -30,7 +30,12 @@ const Novedades = () => {
         return res.json();
       })
       .then((data) => {
-        setNovedades(data);
+        // Convertimos id a idNovedad para consistencia con backend
+        const novedadesConId = data.map((n) => ({
+          ...n,
+          idNovedad: n.id, 
+        }));
+        setNovedades(novedadesConId);
         setLoading(false);
       })
       .catch((err) => {
@@ -39,7 +44,7 @@ const Novedades = () => {
       });
   };
 
-  const handleToggleActivo = async (id, activoActual) => {
+  const handleToggleActivo = async (idNovedad, activoActual) => {
     const confirmMsg = activoActual
       ? "¿Seguro que quieres desactivar esta novedad?"
       : "¿Seguro que quieres activar esta novedad?";
@@ -47,10 +52,16 @@ const Novedades = () => {
 
     try {
       const token = sessionStorage.getItem("token");
-      const novedad = novedades.find((n) => n.id === id);
+      const novedad = novedades.find((n) => n.idNovedad === idNovedad);
       if (!novedad) throw new Error("Novedad no encontrada");
 
-      const novedadActualizada = { ...novedad, activo: !activoActual };
+      const novedadActualizada = {
+        idNovedad: novedad.idNovedad,
+        nombre: novedad.nombre,
+        descripcion: novedad.descripcion,
+        flyer: novedad.flyer,
+        activo: !activoActual, // invertimos el estado
+      };
 
       const res = await fetch("http://localhost:3000/novedades", {
         method: "PUT",
@@ -66,16 +77,19 @@ const Novedades = () => {
         throw new Error(`Error al actualizar la novedad: ${errorText}`);
       }
 
+      // Actualizamos el state para reflejar el cambio en la UI
       setNovedades((prev) =>
-        prev.map((n) => (n.id === id ? novedadActualizada : n))
+        prev.map((n) =>
+          n.idNovedad === idNovedad ? { ...n, activo: !activoActual } : n
+        )
       );
     } catch (err) {
       alert("Error: " + err.message);
     }
   };
 
-  const handleEdit = (id) => {
-    navigate(`/dashboard/editarNovedad/${id}`);
+  const handleEdit = (idNovedad) => {
+    navigate(`/dashboard/editarNovedades/${idNovedad}`);
   };
 
   if (loading) return <p className="loading-text">Cargando novedades...</p>;
@@ -92,7 +106,7 @@ const Novedades = () => {
       {novedades.length === 0 ? (
         <p className="sin-novedades-text">No hay novedades registradas</p>
       ) : (
-        <div className="tabla-wrapper-novedades">  {/* Cambiado para coincidir con CSS */}
+        <div className="tabla-wrapper-novedades">
           <table className="tabla-novedades">
             <thead>
               <tr>
@@ -109,15 +123,15 @@ const Novedades = () => {
             <tbody>
               {novedades.map((n) => (
                 <tr
-                  key={n.id}
+                  key={n.idNovedad}
                   className={`fila-novedad ${n.activo === false ? "inactiva" : ""}`}
                 >
-                  <td>{n.id}</td>
+                  <td>{n.idNovedad}</td>
                   <td>{n.nombre}</td>
                   <td>{n.descripcion}</td>
                   <td>
                     {n.flyer ? (
-                      <img 
+                      <img
                         src={n.flyer}
                         alt={`Flyer de ${n.nombre}`}
                         className="flyer-novedad"
@@ -141,14 +155,14 @@ const Novedades = () => {
                     <div className="botones">
                       <button
                         className="btn-editar"
-                        onClick={() => handleEdit(n.id)}
+                        onClick={() => handleEdit(n.idNovedad)}
                         disabled={n.activo === false}
                       >
                         <FaRegEdit />
                       </button>
                       <button
                         className="btn-eliminar"
-                        onClick={() => handleToggleActivo(n.id, n.activo)}
+                        onClick={() => handleToggleActivo(n.idNovedad, n.activo)}
                       >
                         {n.activo ? (
                           <GrStatusGood color="green" size={20} />

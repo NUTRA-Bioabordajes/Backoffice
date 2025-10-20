@@ -1,0 +1,99 @@
+.editar-novedad-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #f4faff;
+    padding: 5%;
+    border-radius: 12px;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: auto;
+  }
+  
+  /* Título */
+  .editar-novedad-container h1 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #2b2d42;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  /* Formulario */
+  .editar-novedad-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  
+  /* Labels */
+  .editar-novedad-form label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 0.3rem;
+  }
+  
+  /* Inputs y textarea */
+  .editar-novedad-form input[type="text"],
+  .editar-novedad-form input[type="date"],
+  .editar-novedad-form textarea {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .editar-novedad-form input:focus,
+  .editar-novedad-form textarea:focus {
+    border-color: #118ab2;
+  }
+  
+  .editar-novedad-form input[type="checkbox"] {
+    margin-right: 0.5rem;
+    transform: scale(1.2);
+  }
+  
+  /* Botones */
+  .editar-novedad-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .btn-guardar {
+    background-color: #118ab2;
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .btn-guardar:hover {
+    background-color: #0b6e91;
+  }
+  
+  .btn-cancelar {
+    background-color: transparent;
+    border: 1px solid #aaa;
+    color: #333;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  .btn-cancelar:hover {
+    background-color: #eee;
+    color: #000;
+  }
+  

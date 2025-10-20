@@ -37,7 +37,7 @@ function App() {
           <Route path="editarPaciente/:idPaciente" element={<EditarPaciente />} />
           <Route path="novedades" element={<Novedades />} />
           <Route path="agregarNovedades" element={<AgregarNovedades />} />
-          <Route path="editarNovedades/:idNovedad" element={<EditarNovedades />} />
+          <Route path="editarNovedades/:id" element={<EditarNovedades />} />
 
 
 
