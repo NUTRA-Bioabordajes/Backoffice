@@ -1,49 +1,51 @@
-.editar-container {
+.editar-novedades-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  height: 75vh;
-  overflow-y: auto;
   background-color: #faf6f2;
   border-radius: 1rem;
   box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.08);
   font-family: Arial, sans-serif;
+  padding: 0;
+  max-width: 800px;
+  height: 75vh;
+  margin: 0 auto;
+  overflow: hidden; /* el scroll va dentro del formulario */
 }
 
-/* Título principal */
 .titulo {
+  position: sticky;
+  top: 0;
+  background-color: #faf6f2;
   text-align: center;
   font-size: 2rem;
   font-weight: bold;
   color: #333;
-  margin-bottom: 2rem;
-  word-break: break-word;
+  margin: 0;
+  padding: 1.5rem 1rem;
+  z-index: 5;
 }
 
-/* Formulario */
+/* 🔹 Formulario scrolleable */
 .form-novedad {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  padding: 2rem 3rem;
+  overflow-y: auto;
+  flex: 1;
 }
 
-/* Grupo de campos */
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Etiquetas */
-.form-group label {
+/* 🔹 Etiquetas */
+.form-novedad label {
   font-size: 1rem;
   font-weight: 600;
   color: #444;
   margin-bottom: 0.3rem;
 }
 
-/* Inputs y textarea */
-.form-group input,
-.form-group textarea {
+/* 🔹 Inputs y textarea */
+.form-novedad input,
+.eform-novedad textarea {
   padding: 0.8rem 1rem;
   border: 0.1rem solid #ccc;
   border-radius: 0.8rem;
@@ -55,91 +57,71 @@
   box-sizing: border-box;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.form-novedad input:focus,
+.form-novedad textarea:focus {
   border-color: #b5838d;
 }
 
 /* Botones */
-.botones-form {
-  display: flex;
-  justify-content: flex-start;
-  margin-top: 2rem;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
-/* Botón guardar */
 .btn-guardar {
   background-color: #b5838d;
   color: #fff;
   border: none;
-  padding: 0.8rem 2rem;
-  border-radius: 0.8rem;
-  font-size: 1rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-top: 1.5rem;
 }
 
 .btn-guardar:hover {
   background-color: #9a6a74;
 }
 
-/* Botón cancelar */
 .btn-cancelar {
   background-color: transparent;
-  border: 0.1rem solid #aaa;
-  color: #333;
-  padding: 0.8rem 2rem;
-  border-radius: 0.8rem;
-  font-size: 1rem;
-  text-decoration: none;
-  text-align: center;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+    border: 0.1rem solid #aaa;
+    color: #333;
+    border-radius: 0.8rem;
+    font-size: 1rem;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .btn-cancelar:hover {
-  background-color: #eee;
-  color: #000;
+  background-color: #f0e8e4;
 }
 
-/* Estados de carga y error */
-.loading-text,
-.error-text {
-  text-align: center;
-  font-size: 1rem;
-  color: #555;
-  margin-top: 2rem;
-}
-
-.error-text {
-  color: #b00020;
-}
 
 /* 🔹 Responsividad */
-@media (max-width: 768px) {
-  .editar-container {
-    width: 95%;
-    padding: 8%;
-    height: auto;
-  }
-
-  .titulo {
-    font-size: 1.6rem;
-    margin-bottom: 1.5rem;
+@media (max-width: 992px) {
+  .editar-novedades-container {
+    max-width: 90%;
+    height: 80vh;
   }
 
   .form-novedad {
-    gap: 1rem;
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .editar-novedades-container {
+    width: 95%;
+    height: 85vh;
   }
 
-  .btn-guardar,
-  .btn-cancelar {
-    width: 100%;
-    text-align: center;
-    padding: 1rem;
-    font-size: 1rem;
+  .editar-novedades-container h1 {
+    font-size: 1.6rem;
+    padding: 1.2rem 0.8rem;
+  }
+
+  .editar-novedades-container {
+    gap: 1rem;
+    padding: 1.5rem;
   }
 
   .botones-form {
@@ -147,23 +129,13 @@
     align-items: stretch;
     gap: 1rem;
   }
-}
 
-@media (max-width: 480px) {
-  .titulo {
-    font-size: 1.4rem;
-  }
-
-  .editar-container {
-    padding: 10%;
-  }
-
-  .form-group label {
-    font-size: 0.9rem;
-  }
-
-  .form-group input,
-  .form-group textarea {
-    font-size: 0.9rem;
+  .btn-guardar,
+  .btn-cancelar {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
   }
 }
+
+

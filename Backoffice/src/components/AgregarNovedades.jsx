@@ -41,17 +41,17 @@ const AgregarNovedades = () => {
 
     try {
       await axios.post(
-        "http://localhost:3000/novedades", // URL de la API para crear novedades
+        "http://localhost:3000/novedades",
         {
-          Nombre: formData.Nombre,
-          Descripcion: formData.Descripcion,
-          Flyer: formData.Flyer || null,
-          FechaBaja: formData.FechaBaja || null,
+          nombre: formData.Nombre,
+          descripcion: formData.Descripcion,
+          flyer: formData.Flyer || null,
+          fechaBaja: formData.FechaBaja || null,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
-      );
+      );      
 
       alert("Novedad creada con éxito ✅");
       navigate("/dashboard/novedades");

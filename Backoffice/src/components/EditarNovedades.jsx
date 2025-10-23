@@ -83,7 +83,7 @@ const EditarNovedades = () => {
   if (error) return <p className="error-text">Error: {error}</p>;
 
   return (
-    <div className="editar-container">
+    <div className="editar-novedades-container">
       <h1 className="titulo">Editar Novedad</h1>
 
       <form onSubmit={handleSubmit} className="form-novedad">

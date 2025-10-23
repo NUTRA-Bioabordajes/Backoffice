@@ -64,49 +64,39 @@
   border-color: #b5838d;
 }
 
-/* 🔹 Botones */
-.editar-receta-actions {
-  display: flex;
-  justify-content: flex-start;
-  margin-top: 2rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-/* Botón guardar */
+/* Botones */
 .btn-guardar {
   background-color: #b5838d;
   color: #fff;
   border: none;
-  padding: 0.8rem 2rem;
-  border-radius: 0.8rem;
-  font-size: 1rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-top: 1.5rem;
 }
 
 .btn-guardar:hover {
   background-color: #9a6a74;
 }
 
-/* Botón cancelar */
 .btn-cancelar {
   background-color: transparent;
-  border: 0.1rem solid #aaa;
-  color: #333;
-  padding: 0.8rem 2rem;
-  border-radius: 0.8rem;
-  font-size: 1rem;
-  text-decoration: none;
-  text-align: center;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+    border: 0.1rem solid #aaa;
+    color: #333;
+    border-radius: 0.8rem;
+    font-size: 1rem;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .btn-cancelar:hover {
-  background-color: #eee;
-  color: #000;
+  background-color: #f0e8e4;
 }
+
 
 /* 🔹 Responsividad */
 @media (max-width: 992px) {
