@@ -1,58 +1,136 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-export default function Register() {
+export default function RegisterBack() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const passwordsMatch = password === confirmPassword && password !== '';
+
+  const [formData, setFormData] = useState({
+    Nombre: "",
+    Apellido: "",
+    Email: "",
+    password: "",
+    confirmPassword: "",
+    especialidad: "",
+    Admin: false,
+    telefono: "",
+  });
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!passwordsMatch || !username) return;
-  
+    setError("");
+    setSuccess("");
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Las contraseñas no coinciden");
+      return;
+    }
+
     try {
-      // Aquí podrías llamar a tu API de registro si ya la tienes
-      // Ejemplo:
-      // const res = await fetch('http://tu-api/register', { ... });
-      // const data = await res.json();
-      // localStorage.setItem('token', data.token);
-  
-      // Por ahora, navega directo a home
-      navigate('/dashboard/home');
+      const response = await axios.post("/usuariosBack", formData);
+      if (response.data.id) {
+        setSuccess("Usuario creado correctamente. Espera a que lo activen.");
+        setFormData({
+          Nombre: "",
+          Apellido: "",
+          Email: "",
+          password: "",
+          confirmPassword: "",
+          especialidad: "",
+          Admin: false,
+          telefono: "",
+        });
+      }
     } catch (err) {
-      console.error('Error registrando:', err);
+      console.error(err);
+      setError(
+        err.response?.data?.message || "Ocurrió un error al registrar el usuario"
+      );
     }
   };
-  return (
-    <div className="contenedor-autenticacion">
-      <img src="/src/assets/images/logo.png" alt="Nutra logo" className="logo" />
-      <div className="caja-autenticacion">
-        <h2>Registrate</h2>
-        <form onSubmit={handleSubmit}>
-          <label>Nombre de Usuario</label>
-          <input type="text" placeholder="Nombre de Usuario" value={username} onChange={e => setUsername(e.target.value)} />
-          
-          <label>Contraseña</label>
-          <input type="password" placeholder="Contraseña" value={password} onChange={e => setPassword(e.target.value)} />
-          
-          <label>Confirme contraseña</label>
-          <input type="password" placeholder="Confirme contraseña" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
-          {confirmPassword && !passwordsMatch && (
-            <p style={{ color: 'red', marginTop: '5px' }}>Las contraseñas no coinciden</p>
-          )}
-          
-          <button className="boton-autenticacion" type="submit" disabled={!passwordsMatch || !username}>
-            Registrate
-          </button>
-        </form>
 
-        
-        <p className="enlace-autenticacion">
-          ¿Ya tienes una cuenta? <Link to="/">Inicia sesión</Link>
-        </p>
-      </div>
+  return (
+    <div className="register-container">
+      <h2>Registrar Usuario Backoffice</h2>
+      <form onSubmit={handleSubmit} className="register-form">
+        <input
+          type="text"
+          name="Nombre"
+          placeholder="Nombre"
+          value={formData.Nombre}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="Apellido"
+          placeholder="Apellido"
+          value={formData.Apellido}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="Email"
+          name="Email"
+          placeholder="Email"
+          value={formData.Email}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="telefono"
+          placeholder="Teléfono"
+          value={formData.telefono}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          name="especialidad"
+          placeholder="Especialidad"
+          value={formData.especialidad}
+          onChange={handleChange}
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Contraseña"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirmar Contraseña"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          required
+        />
+        <label>
+          <input
+            type="checkbox"
+            name="Admin"
+            checked={formData.Admin}
+            onChange={handleChange}
+          />
+          Admin
+        </label>
+        <button type="submit">Registrar</button>
+      </form>
+      {error && <p className="error-message">{error}</p>}
+      {success && <p className="success-message">{success}</p>}
     </div>
   );
 }

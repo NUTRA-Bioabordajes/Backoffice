@@ -3,55 +3,51 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import './Login.css';
 
+const LogIn = () => {
+  const [form, setForm] = useState({
+    email: "", 
+    password: "",
+  });
+  const [errors, setErrors] = useState({});
+  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
-  const LogIn = () => {
-    const [form, setForm] = useState({
-      username: "",
-      password: "",
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
     });
-    const [errors, setErrors] = useState({});
-    const [success, setSuccess] = useState(false);
-    const navigate = useNavigate();
+    setErrors({
+      ...errors,
+      [e.target.name]: "",
+    });
+  };
 
-    const handleChange = (e) => {
-      setForm({
-        ...form,
-        [e.target.name]: e.target.value,
-      });
-      setErrors({
-        ...errors,
-        [e.target.name]: "",
-      });
-    };
+  const validate = () => {
+    let newErrors = {};
+    if (!form.email) newErrors.email = "Email required";
+    if (!form.password) newErrors.password = "Password required";
+    return newErrors;
+  };
 
-    const validate = () => {
-      let newErrors = {};
-      if (!form.username) newErrors.username = "Email required";
-      if (!form.password) newErrors.password = "Password required";
-      return newErrors;
-    };
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      const validationErrors = validate();
-      if (Object.keys(validationErrors).length > 0) {
-        setErrors(validationErrors);
-        setSuccess(false);
-        return;
-      }
-
-      setErrors({});
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       setSuccess(false);
+      return;
+    }
 
-    
+    setErrors({});
+    setSuccess(false);
 
     try {
-      const url = new URL (`http://localhost:3000/usuarios/loginBack`);
-      console.log(success);
+      const url = new URL('http://localhost:3000/auth/loginBack');
       const response = await axios.post(
         url.toString(),
         {
-          username: form.username,
+          email: form.email,   // ahora coincide con el backend
           password: form.password,
         },
         {
@@ -64,10 +60,7 @@ import './Login.css';
 
       console.log("Login response:", response.data);
       sessionStorage.setItem("token", response.data.token);
-      sessionStorage.setItem("user", response.data.ID);
-      
-
-      console.log(sessionStorage)
+      sessionStorage.setItem("user", response.data.user.id); // usar la propiedad correcta
 
       setSuccess(true);
       setTimeout(() => {
@@ -83,8 +76,7 @@ import './Login.css';
       });
       setSuccess(false);
     }
-  }
-
+  };
 
   return (
     <div className="contenedor-autenticacion">
@@ -94,19 +86,15 @@ import './Login.css';
 
         <form onSubmit={handleSubmit}>
 
-          <label>Nombre de Usuario</label>
+          <label>Email</label>
           <input 
             type="text"
-            name ="username" 
-            value={form.username} 
-            placeholder="Nombre de Usuario" 
+            name="email"
+            value={form.email}
+            placeholder="Email" 
             onChange={handleChange}
           />
-           {errors.username && (
-                <span>{errors.username}</span>
-              )}
-
-
+          {errors.email && <span>{errors.email}</span>}
 
           <label>Contraseña</label>
           <input 
@@ -117,10 +105,7 @@ import './Login.css';
             onChange={handleChange}
             autoComplete="current-password"
           />
-
-              {errors.password && (
-                <span>{errors.password}</span>
-              )}
+          {errors.password && <span>{errors.password}</span>}
 
           <button className="boton-autenticacion">Ingresar</button>
 
