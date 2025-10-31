@@ -33,56 +33,58 @@ import './Login.css';
   
     const handleSubmit = async (e) => {
       e.preventDefault();
+    
+      // Validaciones básicas
       const validationErrors = validate();
       if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
         setSuccess(false);
         return;
       }
-
+    
       setErrors({});
       setSuccess(false);
-
     
-
-    try {
-      const url = new URL (`http://localhost:3000/auth/loginBack`);
-      console.log(success);
-      const response = await axios.post(
-        url.toString(),
-        {
-          username: form.username,
-          password: form.password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "ngrok-skip-browser-warning": 1,
+      try {
+        const url = "http://localhost:3000/auth/loginBack";
+        const response = await axios.post(
+          url,
+          {
+            username: form.username,
+            password: form.password,
           },
-        }
-      );
-
-      console.log("Login response:", response.data);
-      sessionStorage.setItem("token", response.data.token);
-      sessionStorage.setItem("user", response.data.ID);
-
-      console.log(sessionStorage)
-
-      setSuccess(true);
-      setTimeout(() => {
-        navigate("/dashboard/Home");
-      }, 200);
-
-    } catch (err) {
-      setErrors({
-        ...errors,
-        password:
-          err.response?.data?.message ||
-          "Login failed (400). Revisa usuario y contraseña.",
-      });
-      setSuccess(false);
-    }
-  }
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "ngrok-skip-browser-warning": 1,
+            },
+          }
+        );
+    
+        console.log("Login response:", response.data);
+    
+        // Guardar token y userId correctos según la respuesta actual
+        sessionStorage.setItem("token", response.data.accessToken);
+        sessionStorage.setItem("user", response.data.userId);
+    
+        setSuccess(true);
+    
+        // Redirigir al dashboard
+        setTimeout(() => {
+          navigate("/dashboard/Home");
+        }, 200);
+    
+      } catch (err) {
+        // Mostrar mensaje de error según lo que devuelva la API
+        setErrors({
+          ...errors,
+          password:
+            err.response?.data?.message ||
+            "Login failed. Revisa usuario y contraseña.",
+        });
+        setSuccess(false);
+      }
+    };
 
 
   return (

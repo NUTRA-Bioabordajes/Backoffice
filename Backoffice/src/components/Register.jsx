@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function RegisterBack() {
-  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     Nombre: "",
@@ -12,7 +10,6 @@ export default function RegisterBack() {
     password: "",
     confirmPassword: "",
     especialidad: "",
-    Admin: false,
     telefono: "",
   });
 
@@ -20,11 +17,8 @@ export default function RegisterBack() {
   const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -38,25 +32,34 @@ export default function RegisterBack() {
     }
 
     try {
-      const response = await axios.post("/usuariosBack", formData);
-      if (response.data.id) {
-        setSuccess("Usuario creado correctamente. Espera a que lo activen.");
-        setFormData({
-          Nombre: "",
-          Apellido: "",
-          Email: "",
-          password: "",
-          confirmPassword: "",
-          especialidad: "",
-          Admin: false,
-          telefono: "",
-        });
-      }
+      const payload = {
+        Nombre: formData.Nombre,
+        Apellido: formData.Apellido,
+        Email: formData.Email,
+        telefono: formData.telefono,
+        especialidad: formData.especialidad,
+        password: formData.password
+      };
+
+      const response = await axios.post(
+        "http://localhost:3000/usuariosBack/register",
+        payload
+      );
+
+      setSuccess(response.data.message);
+      setFormData({
+        Nombre: "",
+        Apellido: "",
+        Email: "",
+        password: "",
+        confirmPassword: "",
+        especialidad: "",
+        telefono: "",
+      });
+
     } catch (err) {
       console.error(err);
-      setError(
-        err.response?.data?.message || "Ocurrió un error al registrar el usuario"
-      );
+      setError(err.response?.data?.message || "Ocurrió un error al registrar el usuario");
     }
   };
 
@@ -81,7 +84,7 @@ export default function RegisterBack() {
           required
         />
         <input
-          type="Email"
+          type="email"
           name="Email"
           placeholder="Email"
           value={formData.Email}
@@ -95,13 +98,16 @@ export default function RegisterBack() {
           value={formData.telefono}
           onChange={handleChange}
         />
-        <input
-          type="text"
+        <select
           name="especialidad"
-          placeholder="Especialidad"
           value={formData.especialidad}
           onChange={handleChange}
-        />
+          required
+        >
+          <option value="">Seleccionar rol</option>
+          <option value="medico">Médico</option>
+          <option value="diseñador">Diseñador</option>
+        </select>
         <input
           type="password"
           name="password"
@@ -118,17 +124,9 @@ export default function RegisterBack() {
           onChange={handleChange}
           required
         />
-        <label>
-          <input
-            type="checkbox"
-            name="Admin"
-            checked={formData.Admin}
-            onChange={handleChange}
-          />
-          Admin
-        </label>
         <button type="submit">Registrar</button>
       </form>
+
       {error && <p className="error-message">{error}</p>}
       {success && <p className="success-message">{success}</p>}
     </div>
