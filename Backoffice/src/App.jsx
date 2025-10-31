@@ -13,6 +13,7 @@ import EditarPaciente from './components/EditarPaciente';
 import Novedades from './components/Novedades';
 import AgregarNovedades from './components/AgregarNovedades';
 import EditarNovedades from './components/EditarNovedades';
+import Roles from './components/Roles';
 
 
 
@@ -38,6 +39,7 @@ function App() {
           <Route path="novedades" element={<Novedades />} />
           <Route path="agregarNovedades" element={<AgregarNovedades />} />
           <Route path="editarNovedades/:id" element={<EditarNovedades />} />
+          <Route path="roles" element={<Roles />} />
 
 
 

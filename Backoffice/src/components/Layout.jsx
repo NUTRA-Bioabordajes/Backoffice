@@ -12,6 +12,8 @@ const Layout = () => {
                 <Link to="/dashboard/recetas">Recetas</Link>
                 <Link to="/dashboard/pacientes">Pacientes</Link>
                 <Link to="/dashboard/novedades">Novedades</Link>
+                <Link to="/dashboard/roles">Roles</Link>
+
             </nav>
             <Outlet />
         </>
