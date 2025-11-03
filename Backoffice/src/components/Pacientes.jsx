@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./Pacientes.css";
 import { GrStatusGood } from "react-icons/gr";
 import { RxCrossCircled } from "react-icons/rx";
 import { FaRegEdit } from "react-icons/fa";
+import "./Pacientes.css";
 
 const Pacientes = () => {
   const [pacientes, setPacientes] = useState([]);
@@ -11,33 +11,50 @@ const Pacientes = () => {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+  const rol = sessionStorage.getItem("rol"); // Obtener el rol desde sessionStorage
+  const token = sessionStorage.getItem("token"); // Obtener el token desde sessionStorage
 
   useEffect(() => {
     fetchPacientes();
   }, []);
 
-  const fetchPacientes = () => {
+  const fetchPacientes = async () => {
     setLoading(true);
-    const token = sessionStorage.getItem("token");
+    setError(null);
 
-    fetch("http://localhost:3000/usuarios", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Error al traer los pacientes");
-        return res.json();
-      })
-      .then((data) => {
-        setPacientes(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
+    try {
+      let url = "http://localhost:3000/usuarios"; // URL base para admin
+      if (rol === "medico") {
+        // Si es médico, traer solo los pacientes asignados a ese médico
+        url = "http://localhost:3000/usuarios/porMedico";
+      }
+
+      const res = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
+
+      // Si el servidor responde con 403 (no autorizado)
+      if (res.status === 403) {
+        setPacientes([]);
+        setError("No estás autorizado en esta sección.");
+        setLoading(false);
+        return;
+      }
+
+      // Si la respuesta no es correcta, mostrar error
+      if (!res.ok) throw new Error("Error al traer los pacientes");
+
+      // Si la respuesta es exitosa, actualizar el estado con los datos
+      const data = await res.json();
+      setPacientes(data);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
   };
 
   const handleToggleActivo = async (id, activoActual) => {
@@ -45,32 +62,32 @@ const Pacientes = () => {
       ? "¿Seguro que quieres desactivar este paciente?"
       : "¿Seguro que quieres activar este paciente?";
     if (!window.confirm(confirmMsg)) return;
-  
+
     try {
-      const token = sessionStorage.getItem("token");
-  
       // Buscar paciente completo en el estado
       const paciente = pacientes.find((p) => p.id === id);
       if (!paciente) throw new Error("Paciente no encontrado");
-  
+
       // Crear nuevo objeto con activo cambiado
       const pacienteActualizado = { ...paciente, activo: !activoActual };
-  
+
+      // Actualizar paciente en la API
       const res = await fetch(`http://localhost:3000/usuarios/${id}`, {
-        method: "PUT", // actualizar todo
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(pacienteActualizado),
       });
-  
+
+      // Si la respuesta no es correcta, mostrar error
       if (!res.ok) {
         const errorText = await res.text();
         throw new Error(`Error al actualizar el paciente: ${errorText}`);
       }
-  
-      // Actualizar estado localmente para reflejar cambio
+
+      // Actualizar estado localmente para reflejar el cambio
       setPacientes((prev) =>
         prev.map((p) => (p.id === id ? pacienteActualizado : p))
       );
@@ -78,14 +95,15 @@ const Pacientes = () => {
       alert("Error: " + err.message);
     }
   };
-  
 
   const handleEdit = (id) => {
     navigate(`/dashboard/editarPaciente/${id}`);
   };
 
   if (loading) return <p className="loading-text">Cargando pacientes...</p>;
-  if (error) return <p className="error">Error: {error}</p>;
+  if (error) return <p className="error">{error}</p>;
+
+  console.log(pacientes)
 
   return (
     <div className="pacientes-container">
@@ -95,7 +113,9 @@ const Pacientes = () => {
       </Link>
 
       {pacientes.length === 0 ? (
-        <p className="sin-pacientes-text">No hay pacientes registrados</p>
+        <p className="sin-pacientes-text">
+          {error ? error : "No hay pacientes registrados"}
+        </p>
       ) : (
         <div className="tabla-wrapper">
           <table className="tabla-pacientes">
@@ -108,7 +128,7 @@ const Pacientes = () => {
                 <th>Diagnóstico</th>
                 <th>Sexo</th>
                 <th>Barrio</th>
-                <th>ID Médico</th>
+                <th>Médico</th>
                 <th>Foto</th>
                 <th>Acciones</th>
               </tr>
@@ -117,7 +137,9 @@ const Pacientes = () => {
               {pacientes.map((p) => (
                 <tr
                   key={p.id}
-                  className={`fila-paciente ${p.activo === false ? "inactivo" : ""}`}
+                  className={`fila-paciente ${
+                    p.activo === false ? "inactivo" : ""
+                  }`}
                 >
                   <td>{p.id}</td>
                   <td>{p.dni}</td>
@@ -126,7 +148,7 @@ const Pacientes = () => {
                   <td>{p.diagnostico}</td>
                   <td>{p.sexo}</td>
                   <td>{p.barrio}</td>
-                  <td>{p.idMedico}</td>
+                  <td>{p.medico}</td>
                   <td>
                     {p.foto ? (
                       <img
@@ -139,26 +161,25 @@ const Pacientes = () => {
                     )}
                   </td>
                   <td>
-                  <div className="botones">
-                    <button
-                      className="btn-editar"
-                      onClick={() => handleEdit(p.id)}
-                      disabled={p.activo === false}
-                    >
-                      <FaRegEdit />
-                    </button>
-                    <button
-                      className="btn-eliminar"
-                      onClick={() => handleToggleActivo(p.id, p.activo)}
-                    >
-                      {p.activo ? (
-                        <GrStatusGood color="green" size={20} />
-                      ) : (
-                        <RxCrossCircled color="red" size={20} />
-                      )}
-                    </button>
-                  </div>
-
+                    <div className="botones">
+                      <button
+                        className="btn-editar"
+                        onClick={() => handleEdit(p.id)}
+                        disabled={p.activo === false}
+                      >
+                        <FaRegEdit />
+                      </button>
+                      <button
+                        className="btn-eliminar"
+                        onClick={() => handleToggleActivo(p.id, p.activo)}
+                      >
+                        {p.activo ? (
+                          <GrStatusGood color="green" size={20} />
+                        ) : (
+                          <RxCrossCircled color="red" size={20} />
+                        )}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

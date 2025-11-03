@@ -30,7 +30,9 @@ const AgregarPaciente = () => {
   });
   const animatedComponents = makeAnimated();
   const [intoleranciasDisponibles, setIntoleranciasDisponibles] = useState([]);
+  const [medicosDisponibles, setMedicosDisponibles] = useState([]);
   const [intolerancias, setIntolerancias] = useState([]); // array de números
+  const [medicos, setMedicos] = useState([]);
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
@@ -49,6 +51,24 @@ const AgregarPaciente = () => {
           label: i.Nombre
         }));
         setIntoleranciasDisponibles(opciones);
+      })
+      .catch(err => console.error(err));
+  }, []);
+
+  // Traer medicos desde la API
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    fetch("http://localhost:3000/usuariosBack/medicos", {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        // Convertimos a array de objetos {value:number,label:string}
+        const opciones = data.map(m => ({
+          value: Number(m.id),
+          label: m.Nombre + '' + m.apellido
+        }));
+        setMedicosDisponibles(opciones);
       })
       .catch(err => console.error(err));
   }, []);
@@ -76,6 +96,7 @@ const AgregarPaciente = () => {
     const dataToSend = {
       ...formData,
       intolerancias: intolerancias.map(id => Number(id)),
+      medicos: medicos.map(id => Number(id))
     };
 
     try {
@@ -158,20 +179,23 @@ const AgregarPaciente = () => {
         </div>
 
         <div className="campo">
-          <label>ID Médico tratante</label>
-          <input
-            type="number"
-            name="idMedicoTratante"
-            className="input"
-            value={formData.idMedicoTratante}
-            onChange={handleChange}
-          />
-          {errors.idMedicoTratante && <p className="error">{errors.idMedicoTratante}</p>}
-        </div>
+          <label>Medico</label>
+          <Select
+          closeMenuOnSelect={true}       // cierra al seleccionar
+          components={animatedComponents}
+          isMulti
+          options={medicosDisponibles}
+          value={medicosDisponibles.filter(opt => medicos.includes(opt.value))}
+          onChange={(selectedOptions) => {
+            setMedicos(selectedOptions ? selectedOptions.map(o => o.value) : []);
+          }}
+          placeholder="Seleccione el médico..."
+        />
+      </div>
 
 {/* NUEVO: Intolerancias */}
 <div className="campo">
-  <label>Intolerancias</label>
+  <label>Dietas</label>
   <Select
   closeMenuOnSelect={true}       // cierra al seleccionar
   components={animatedComponents}

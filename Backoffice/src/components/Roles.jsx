@@ -17,14 +17,22 @@ const Roles = () => {
   const fetchMedicos = () => {
     const token = sessionStorage.getItem("token");
     setLoading(true);
-    fetch("http://localhost:3000/usuariosBack", {
+    setError(null); // limpiar errores previos
+  
+    fetch("http://localhost:3000/usuariosBack/medicos", {
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       },
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Error al traer los médicos");
+        if (res.status === 403) {
+          // Usuario no autorizado
+          throw new Error("No estás autorizado en esta sección."); 
+        }
+        if (!res.ok) {
+          throw new Error("Error al traer los médicos");
+        }
         return res.json();
       })
       .then((data) => {
@@ -36,6 +44,7 @@ const Roles = () => {
         setLoading(false);
       });
   };
+  
 
   const handleDelete = async (id) => {
     if (!window.confirm("¿Seguro que quieres eliminar este médico?")) return;
