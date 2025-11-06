@@ -58,20 +58,38 @@ const AgregarPaciente = () => {
   // Traer medicos desde la API
   useEffect(() => {
     const token = sessionStorage.getItem("token");
-    fetch("http://localhost:3000/usuariosBack/medicos", {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => res.json())
-      .then(data => {
-        // Convertimos a array de objetos {value:number,label:string}
-        const opciones = data.map(m => ({
-          value: Number(m.id),
-          label: m.Nombre + '' + m.apellido
+  
+    const fetchMedicos = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/usuariosBack/medicos", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        if (!res.ok) {
+          console.error("Error al traer médicos:", res.statusText);
+          setMedicosDisponibles([]);
+          return;
+        }
+  
+        const data = await res.json();
+        console.log("DATA MEDICOS:", data); 
+  
+        const opciones = data.map((m) => ({
+          value: Number(m.id), 
+          label: `${m.Nombre} ${m.Apellido}`,
         }));
+  
         setMedicosDisponibles(opciones);
-      })
-      .catch(err => console.error(err));
+        console.log("Opciones médicos:", opciones);
+      } catch (err) {
+        console.error("Error en fetch médicos:", err);
+        setMedicosDisponibles([]);
+      }
+    };
+  
+    fetchMedicos();
   }, []);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -181,13 +199,13 @@ const AgregarPaciente = () => {
         <div className="campo">
           <label>Medico</label>
           <Select
-          closeMenuOnSelect={true}       // cierra al seleccionar
+          closeMenuOnSelect={true}
           components={animatedComponents}
-          isMulti
+          isMulti={false} 
           options={medicosDisponibles}
-          value={medicosDisponibles.filter(opt => medicos.includes(opt.value))}
-          onChange={(selectedOptions) => {
-            setMedicos(selectedOptions ? selectedOptions.map(o => o.value) : []);
+          value={medicosDisponibles.find(opt => opt.value === formData.idMedicoTratante)}
+          onChange={(selectedOption) => {
+            setFormData(prev => ({ ...prev, idMedicoTratante: selectedOption?.value || "" }));
           }}
           placeholder="Seleccione el médico..."
         />
