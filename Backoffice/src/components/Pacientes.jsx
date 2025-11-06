@@ -10,6 +10,7 @@ const Pacientes = () => {
     fetchPacientes();
   }, []);
 
+
   const fetchPacientes = async () => {
     setLoading(true);
     setError(null);
@@ -17,20 +18,19 @@ const Pacientes = () => {
     try {
       const token = sessionStorage.getItem("token");
       const usuario = JSON.parse(sessionStorage.getItem("usuarioBack"));
-      const especialidad = usuario?.especialidad; // <- clave para decidir el rol
+      const especialidad = usuario?.especialidad;
+console.log(usuario.especialidad);
 
       if (!especialidad) {
-        setError("No estás autorizado en esta sección.");
+        setError("Error al obtener el rol del usuario.");
         setLoading(false);
         return;
       }
 
-      let url = "http://localhost:3000/usuarios"; // por defecto (admin)
-      if (especialidad === "medico") {
-        // Si es médico, traer solo sus pacientes
-        url = "http://localhost:3000/usuarios/porMedico";
-      } else if (especialidad === "diseñador") {
-        // Si es diseñador, no tiene acceso
+      let url = "http://localhost:3000/usuarios"; // default (admin)
+      if (especialidad.toLowerCase() === "medico") {
+        url = "http://localhost:3000/usuarios/porMedico"; // pacientes del médico
+      } else if (especialidad.toLowerCase() === "diseñador") {
         setError("No estás autorizado en esta sección.");
         setPacientes([]);
         setLoading(false);

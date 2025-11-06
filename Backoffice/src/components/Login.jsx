@@ -3,89 +3,72 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import './Login.css';
 
+const LogIn = () => {
+  const [form, setForm] = useState({
+    username: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({});
+  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
-  const LogIn = () => {
-    const [form, setForm] = useState({
-      username: "",
-      password: "",
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
     });
-    const [errors, setErrors] = useState({});
-    const [success, setSuccess] = useState(false);
-    const navigate = useNavigate();
+    setErrors({
+      ...errors,
+      [e.target.name]: "",
+    });
+  };
 
-    const handleChange = (e) => {
-      setForm({
-        ...form,
-        [e.target.name]: e.target.value,
+  const validate = () => {
+    let newErrors = {};
+    if (!form.username) newErrors.username = "Email requerido";
+    if (!form.password) newErrors.password = "Contraseña requerida";
+    return newErrors;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      setSuccess(false);
+      return;
+    }
+
+    try {
+      const url = "http://localhost:3000/auth/loginBack";
+      const response = await axios.post(url, {
+        username: form.username,
+        password: form.password,
       });
+
+      console.log("Login response:", response.data);
+
+      // ✅ Guardamos token y datos del usuario
+      sessionStorage.setItem("token", response.data.accessToken);
+      sessionStorage.setItem("usuarioBack", JSON.stringify(response.data.usuario));
+
+      setSuccess(true);
+
+      // ✅ Redirigir al dashboard después de 200ms
+      setTimeout(() => {
+        navigate("/dashboard/Home");
+      }, 200);
+    } catch (err) {
       setErrors({
         ...errors,
-        [e.target.name]: "",
+        password:
+          err.response?.data?.message ||
+          "Login fallido. Revisa usuario y contraseña.",
       });
-    };
-
-    const validate = () => {
-      let newErrors = {};
-      if (!form.username) newErrors.username = "Email required";
-      if (!form.password) newErrors.password = "Password required";
-      return newErrors;
-    };
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-    
-      // Validaciones básicas
-      const validationErrors = validate();
-      if (Object.keys(validationErrors).length > 0) {
-        setErrors(validationErrors);
-        setSuccess(false);
-        return;
-      }
-    
-      setErrors({});
       setSuccess(false);
-    
-      try {
-        const url = "http://localhost:3000/auth/loginBack";
-        const response = await axios.post(
-          url,
-          {
-            username: form.username,
-            password: form.password,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "ngrok-skip-browser-warning": 1,
-            },
-          }
-        );
-    
-        console.log("Login response:", response.data);
-    
-        // Guardar token y userId correctos según la respuesta actual
-        sessionStorage.setItem("token", response.data.accessToken);
-        sessionStorage.setItem("user", response.data.userId);
-    
-        setSuccess(true);
-    
-        // Redirigir al dashboard
-        setTimeout(() => {
-          navigate("/dashboard/Home");
-        }, 200);
-    
-      } catch (err) {
-        // Mostrar mensaje de error según lo que devuelva la API
-        setErrors({
-          ...errors,
-          password:
-            err.response?.data?.message ||
-            "Login failed. Revisa usuario y contraseña.",
-        });
-        setSuccess(false);
-      }
-    };
-
+    }
+  };
 
   return (
     <div className="contenedor-autenticacion">
@@ -94,41 +77,37 @@ import './Login.css';
         <h2>¡Bienvenido/a de nuevo!</h2>
 
         <form onSubmit={handleSubmit}>
-
           <label>Nombre de Usuario</label>
-          <input 
+          <input
             type="text"
-            name ="username" 
-            value={form.username} 
-            placeholder="Nombre de Usuario" 
+            name="username"
+            value={form.username}
+            placeholder="Nombre de Usuario"
             onChange={handleChange}
           />
-           {errors.username && (
-                <span>{errors.username}</span>
-              )}
-
-
+          {errors.username && <span>{errors.username}</span>}
 
           <label>Contraseña</label>
-          <input 
-            type="password" 
+          <input
+            type="password"
             name="password"
-            placeholder="Contraseña" 
-            value={form.password} 
+            placeholder="Contraseña"
+            value={form.password}
             onChange={handleChange}
             autoComplete="current-password"
           />
+          {errors.password && <span>{errors.password}</span>}
 
-              {errors.password && (
-                <span>{errors.password}</span>
-              )}
-
-          <button className="boton-autenticacion">Ingresar</button>
+          <button type="submit" className="boton-autenticacion">
+            Ingresar
+          </button>
 
           <p className="enlace-autenticacion">
             ¿No tienes usuario? <Link to="/register">Registrate</Link>
           </p>
         </form>
+
+        {success && <p className="mensaje-exito">Inicio de sesión exitoso</p>}
       </div>
     </div>
   );
