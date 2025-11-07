@@ -10,6 +10,10 @@ const Roles = () => {
 
   const navigate = useNavigate();
 
+  //Obtener info del usuario logueado
+  const usuarioBack = JSON.parse(sessionStorage.getItem("usuarioBack"));
+  const esAdmin = usuarioBack?.Admin === true;
+console.log(esAdmin);
   useEffect(() => {
     fetchMedicos();
   }, []);
@@ -17,8 +21,8 @@ const Roles = () => {
   const fetchMedicos = () => {
     const token = sessionStorage.getItem("token");
     setLoading(true);
-    setError(null); // limpiar errores previos
-  
+    setError(null);
+
     fetch("http://localhost:3000/usuariosBack/medicos", {
       headers: {
         "Content-Type": "application/json",
@@ -27,8 +31,7 @@ const Roles = () => {
     })
       .then((res) => {
         if (res.status === 403) {
-          // Usuario no autorizado
-          throw new Error("No estás autorizado en esta sección."); 
+          throw new Error("No estás autorizado en esta sección.");
         }
         if (!res.ok) {
           throw new Error("Error al traer los médicos");
@@ -44,9 +47,13 @@ const Roles = () => {
         setLoading(false);
       });
   };
-  
 
   const handleDelete = async (id) => {
+    if (!esAdmin) {
+      alert("No tenés permisos para eliminar médicos.");
+      return;
+    }
+
     if (!window.confirm("¿Seguro que quieres eliminar este médico?")) return;
 
     try {
@@ -67,6 +74,10 @@ const Roles = () => {
   };
 
   const handleEdit = (id) => {
+    if (!esAdmin) {
+      alert("No tenés permisos para editar médicos.");
+      return;
+    }
     navigate(`/dashboard/editarMedico/${id}`);
   };
 
@@ -77,9 +88,11 @@ const Roles = () => {
     <div className="roles-container">
       <h1 className="titulo">Médicos</h1>
 
-      <Link to="/dashboard/agregarMedico" className="agregar-rol-link">
-        + Agregar Médico
-      </Link>
+      {esAdmin && (
+        <Link to="/dashboard/agregarMedico" className="agregar-rol-link">
+          + Agregar Médico
+        </Link>
+      )}
 
       {medicos.length === 0 ? (
         <p className="sin-roles-text">No hay médicos registrados</p>
@@ -108,18 +121,24 @@ const Roles = () => {
                   <td>{m.especialidad}</td>
                   <td>
                     <div className="botones">
-                      <button
-                        className="btn-editar"
-                        onClick={() => handleEdit(m.id)}
-                      >
-                        <FaRegEdit />
-                      </button>
-                      <button
-                        className="btn-eliminar"
-                        onClick={() => handleDelete(m.id)}
-                      >
-                        <FaRegTrashAlt />
-                      </button>
+                      {esAdmin ? (
+                        <>
+                          <button
+                            className="btn-editar"
+                            onClick={() => handleEdit(m.id)}
+                          >
+                            <FaRegEdit />
+                          </button>
+                          <button
+                            className="btn-eliminar"
+                            onClick={() => handleDelete(m.id)}
+                          >
+                            <FaRegTrashAlt />
+                          </button>
+                        </>
+                      ) : (
+                        <span className="sin-permiso"></span>
+                      )}
                     </div>
                   </td>
                 </tr>

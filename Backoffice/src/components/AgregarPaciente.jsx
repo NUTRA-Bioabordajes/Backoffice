@@ -32,7 +32,7 @@ const AgregarPaciente = () => {
   const [intoleranciasDisponibles, setIntoleranciasDisponibles] = useState([]);
   const [medicosDisponibles, setMedicosDisponibles] = useState([]);
   const [intolerancias, setIntolerancias] = useState([]); // array de números
-  const [medicos, setMedicos] = useState([]);
+
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
@@ -114,7 +114,6 @@ const AgregarPaciente = () => {
     const dataToSend = {
       ...formData,
       intolerancias: intolerancias.map(id => Number(id)),
-      medicos: medicos.map(id => Number(id))
     };
 
     try {

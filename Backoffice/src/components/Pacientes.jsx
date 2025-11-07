@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Pacientes.css";
+import { GrStatusGood } from "react-icons/gr";
+import { RxCrossCircled } from "react-icons/rx";
+import { FaRegEdit } from "react-icons/fa";
 
 const Pacientes = () => {
   const [pacientes, setPacientes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     fetchPacientes();
   }, []);
-
 
   const fetchPacientes = async () => {
     setLoading(true);
@@ -17,9 +22,9 @@ const Pacientes = () => {
 
     try {
       const token = sessionStorage.getItem("token");
-      const usuario = JSON.parse(sessionStorage.getItem("usuarioBack"));
+      const usuarioBack = sessionStorage.getItem("usuarioBack");
+      const usuario = JSON.parse(usuarioBack);
       const especialidad = usuario?.especialidad;
-console.log(usuario.especialidad);
 
       if (!especialidad) {
         setError("Error al obtener el rol del usuario.");
@@ -27,7 +32,7 @@ console.log(usuario.especialidad);
         return;
       }
 
-      let url = "http://localhost:3000/usuarios"; // default (admin)
+      let url = "http://localhost:3000/usuarios"; // admin
       if (especialidad.toLowerCase() === "medico") {
         url = "http://localhost:3000/usuarios/porMedico"; // pacientes del médico
       } else if (especialidad.toLowerCase() === "diseñador") {
@@ -62,45 +67,131 @@ console.log(usuario.especialidad);
     }
   };
 
-  if (loading) return <p>Cargando pacientes...</p>;
+  const handleToggleActivo = async (id, activoActual) => {
+    const confirmMsg = activoActual
+      ? "¿Seguro que quieres desactivar este paciente?"
+      : "¿Seguro que quieres activar este paciente?";
+    if (!window.confirm(confirmMsg)) return;
+
+    try {
+      const token = sessionStorage.getItem("token");
+
+      const paciente = pacientes.find((p) => p.id === id);
+      if (!paciente) throw new Error("Paciente no encontrado");
+
+      const pacienteActualizado = { ...paciente, activo: !activoActual };
+
+      const res = await fetch(`http://localhost:3000/usuarios/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(pacienteActualizado),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Error al actualizar paciente: ${errorText}`);
+      }
+
+      // Actualiza localmente el estado
+      setPacientes((prev) =>
+        prev.map((p) => (p.id === id ? pacienteActualizado : p))
+      );
+    } catch (err) {
+      alert("Error: " + err.message);
+    }
+  };
+
+  const handleEdit = (id) => {
+    navigate(`/dashboard/editarPaciente/${id}`);
+  };
+
+  if (loading) return <p className="loading-text">Cargando pacientes...</p>;
   if (error) return <p className="error-text">{error}</p>;
 
   return (
     <div className="pacientes-container">
-      <h1>Lista de Pacientes</h1>
+      <h1 className="titulo">Pacientes</h1>
+
+      {/* ✅ Botón agregar paciente */}
+      <Link to="/dashboard/agregarPaciente" className="agregar-paciente-link">
+        + Agregar Paciente
+      </Link>
 
       {pacientes.length === 0 ? (
-        <p>No hay pacientes disponibles</p>
+        <p className="sin-pacientes-text">No hay pacientes disponibles</p>
       ) : (
-        <table className="tabla-pacientes">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>Diagnóstico</th>
-              <th>Sexo</th>
-              <th>Barrio</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pacientes.map((p) => (
-              <tr
-                key={p.id}
-                className={`fila-paciente ${
-                  p.activo === false ? "inactivo" : ""
-                }`}
-              >
-                <td>{p.id}</td>
-                <td>{p.nombre}</td>
-                <td>{p.apellido}</td>
-                <td>{p.diagnostico}</td>
-                <td>{p.sexo}</td>
-                <td>{p.barrio}</td>
+        <div className="tabla-wrapper">
+          <table className="tabla-pacientes">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>DNI</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Diagnóstico</th>
+                <th>Sexo</th>
+                <th>Barrio</th>
+                <th>ID Médico</th>
+                <th>Foto</th>
+                <th>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {pacientes.map((p) => (
+                <tr
+                  key={p.id}
+                  className={`fila-paciente ${
+                    p.activo === false ? "inactivo" : ""
+                  }`}
+                >
+                  <td>{p.id}</td>
+                  <td>{p.dni}</td>
+                  <td>{p.nombre}</td>
+                  <td>{p.apellido}</td>
+                  <td>{p.diagnostico}</td>
+                  <td>{p.sexo}</td>
+                  <td>{p.barrio}</td>
+                  <td>{p.idMedico}</td>
+                  <td>
+                    {p.foto ? (
+                      <img
+                        src={p.foto}
+                        alt={`${p.nombre} ${p.apellido}`}
+                        className="foto-paciente"
+                      />
+                    ) : (
+                      "Sin foto"
+                    )}
+                  </td>
+                  <td>
+                    <div className="botones">
+                      <button
+                        className="btn-editar"
+                        onClick={() => handleEdit(p.id)}
+                        disabled={p.activo === false}
+                      >
+                        <FaRegEdit />
+                      </button>
+                      <button
+                      className="btn-eliminar"
+                      onClick={() => handleToggleActivo(p.id, p.activo)}
+                    >
+                      {p.activo ? (
+                        <GrStatusGood color="green" size={20} />
+                      ) : (
+                        <RxCrossCircled color="red" size={20} />
+                      )}
+                    </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
