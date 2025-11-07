@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { FaRegTrashAlt, FaRegEdit } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
+import { GrStatusGood } from "react-icons/gr";
+import { RxCrossCircled } from "react-icons/rx";
 import "./Roles.css";
 
 const Roles = () => {
   const [medicos, setMedicos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const navigate = useNavigate();
 
-  //Obtener info del usuario logueado
   const usuarioBack = JSON.parse(sessionStorage.getItem("usuarioBack"));
   const esAdmin = usuarioBack?.Admin === true;
-console.log(esAdmin);
+
   useEffect(() => {
     fetchMedicos();
   }, []);
@@ -21,21 +21,14 @@ console.log(esAdmin);
   const fetchMedicos = () => {
     const token = sessionStorage.getItem("token");
     setLoading(true);
-    setError(null);
-
     fetch("http://localhost:3000/usuariosBack/medicos", {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {
-        if (res.status === 403) {
-          throw new Error("No estás autorizado en esta sección.");
-        }
-        if (!res.ok) {
-          throw new Error("Error al traer los médicos");
-        }
+        if (!res.ok) throw new Error("Error al traer los médicos");
         return res.json();
       })
       .then((data) => {
@@ -48,26 +41,38 @@ console.log(esAdmin);
       });
   };
 
-  const handleDelete = async (id) => {
+  const handleToggleActivo = async (id, activoActual) => {
     if (!esAdmin) {
-      alert("No tenés permisos para eliminar médicos.");
+      alert("No tenés permisos para modificar médicos.");
       return;
     }
 
-    if (!window.confirm("¿Seguro que quieres eliminar este médico?")) return;
+    const confirmMsg = activoActual
+      ? "¿Seguro que querés inactivar este médico?"
+      : "¿Seguro que querés activar este médico?";
+    if (!window.confirm(confirmMsg)) return;
 
     try {
       const token = sessionStorage.getItem("token");
+      const medico = medicos.find((m) => m.id === id);
+      if (!medico) throw new Error("Médico no encontrado");
+
+      const medicoActualizado = { ...medico, activo: !activoActual };
+
       const res = await fetch(`http://localhost:3000/usuariosBack/${id}`, {
-        method: "DELETE",
+        method: "PUT",
         headers: {
-          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
+        body: JSON.stringify(medicoActualizado),
       });
 
-      if (!res.ok) throw new Error("Error al eliminar el médico");
+      if (!res.ok) throw new Error("Error al actualizar médico");
 
-      setMedicos(medicos.filter((m) => m.id !== id));
+      setMedicos((prev) =>
+        prev.map((m) => (m.id === id ? { ...m, activo: !activoActual } : m))
+      );
     } catch (err) {
       alert("Error: " + err.message);
     }
@@ -94,59 +99,57 @@ console.log(esAdmin);
         </Link>
       )}
 
-      {medicos.length === 0 ? (
-        <p className="sin-roles-text">No hay médicos registrados</p>
-      ) : (
-        <div className="tabla-wrapper">
-          <table className="tabla-roles">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Email</th>
-                <th>Teléfono</th>
-                <th>Especialidad</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {medicos.map((m) => (
-                <tr key={m.id}>
-                  <td>{m.id}</td>
-                  <td>{m.Nombre}</td>
-                  <td>{m.Apellido}</td>
-                  <td>{m.Email}</td>
-                  <td>{m.telefono || "Sin teléfono"}</td>
-                  <td>{m.especialidad}</td>
-                  <td>
+      <div className="tabla-wrapper">
+        <table className="tabla-roles">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {medicos.map((m) => (
+              <tr
+                key={m.id}
+                className={`fila-medico ${!m.activo ? "inactivo" : ""}`}
+              >
+                <td>{m.id}</td>
+                <td>{m.Nombre}</td>
+                <td>{m.Apellido}</td>
+                <td>{m.Email}</td>
+                <td>{m.telefono || "Sin teléfono"}</td>
+                <td>
+                  {esAdmin && (
                     <div className="botones">
-                      {esAdmin ? (
-                        <>
-                          <button
-                            className="btn-editar"
-                            onClick={() => handleEdit(m.id)}
-                          >
-                            <FaRegEdit />
-                          </button>
-                          <button
-                            className="btn-eliminar"
-                            onClick={() => handleDelete(m.id)}
-                          >
-                            <FaRegTrashAlt />
-                          </button>
-                        </>
-                      ) : (
-                        <span className="sin-permiso"></span>
-                      )}
+                      <button
+                        className="btn-editar"
+                        onClick={() => handleEdit(m.id)}
+                        disabled={!m.activo}
+                      >
+                        <FaRegEdit />
+                      </button>
+                      <button
+                        className="btn-inactivar"
+                        onClick={() => handleToggleActivo(m.id, m.activo)}
+                      >
+                        {m.activo ? (
+                          <GrStatusGood color="green" size={20} />
+                        ) : (
+                          <RxCrossCircled color="red" size={20} />
+                        )}
+                      </button>
                     </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

@@ -5,7 +5,7 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
 const EditarPaciente = () => {
-  const { id } = useParams();
+  const { idPaciente } = useParams();
   const navigate = useNavigate();
   const animatedComponents = makeAnimated();
 
@@ -24,19 +24,22 @@ const EditarPaciente = () => {
   const [intoleranciasDisponibles, setIntoleranciasDisponibles] = useState([]);
   const [intoleranciasSeleccionadas, setIntoleranciasSeleccionadas] = useState([]);
   const [medicosDisponibles, setMedicosDisponibles] = useState([]);
-  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
+  const [errors, setErrors] = useState({});
 
-  // 🧠 Traer datos del paciente
+  // 🔹 Obtener datos del paciente
   useEffect(() => {
     const token = sessionStorage.getItem("token");
 
     const fetchPaciente = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/usuarios/${id}`, {
+        const res = await fetch(`http://localhost:3000/usuarios/${idPaciente}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        if (!res.ok) throw new Error("Error al obtener paciente");
+
         const data = await res.json();
+
         setFormData({
           nombre: data.nombre || data.Nombre || "",
           apellido: data.apellido || data.Apellido || "",
@@ -51,15 +54,13 @@ const EditarPaciente = () => {
         });
       } catch (err) {
         console.error("Error cargando paciente:", err);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchPaciente();
-  }, [id]);
+  }, [idPaciente]);
 
-  // 🧠 Traer intolerancias disponibles
+  // 🔹 Obtener intolerancias disponibles
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     fetch("http://localhost:3000/intolerancias", {
@@ -76,10 +77,10 @@ const EditarPaciente = () => {
       .catch((err) => console.error("Error cargando intolerancias:", err));
   }, []);
 
-  // 🧠 Traer intolerancias actuales del paciente
+  // 🔹 Obtener intolerancias del paciente
   useEffect(() => {
     const token = sessionStorage.getItem("token");
-    fetch(`http://localhost:3000/usuarios/${id}/intolerancias`, {
+    fetch(`http://localhost:3000/usuarios/${idPaciente}/intolerancias`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -90,9 +91,9 @@ const EditarPaciente = () => {
       .catch((err) =>
         console.error("Error cargando intolerancias del paciente:", err)
       );
-  }, [id]);
+  }, [idPaciente]);
 
-  // 🧠 Traer médicos disponibles
+  // 🔹 Obtener médicos disponibles
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     fetch("http://localhost:3000/usuariosBack/medicos", {
@@ -109,13 +110,23 @@ const EditarPaciente = () => {
       .catch((err) => console.error("Error cargando médicos:", err));
   }, []);
 
-  // 📥 Cambiar valores del form
+  // 🔹 Control de carga
+  useEffect(() => {
+    if (
+      formData.nombre !== "" &&
+      medicosDisponibles.length > 0 &&
+      intoleranciasDisponibles.length > 0
+    ) {
+      setLoading(false);
+    }
+  }, [formData, medicosDisponibles, intoleranciasDisponibles]);
+
+  // 🔹 Manejadores
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 📥 Guardar cambios
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -127,7 +138,7 @@ const EditarPaciente = () => {
     };
 
     try {
-      const res = await fetch(`http://localhost:3000/usuarios/${id}`, {
+      const res = await fetch(`http://localhost:3000/usuarios/${idPaciente}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -138,7 +149,7 @@ const EditarPaciente = () => {
 
       if (!res.ok) throw new Error("Error al actualizar el paciente");
 
-      alert("Paciente actualizado con éxito ✅");
+      alert("✅ Paciente actualizado con éxito");
       navigate("/dashboard/pacientes");
     } catch (err) {
       console.error(err);
@@ -153,6 +164,7 @@ const EditarPaciente = () => {
       <h1>Editar paciente</h1>
 
       <form onSubmit={handleSubmit}>
+        {/* Campos básicos */}
         <div className="campo">
           <label>Nombre</label>
           <input
@@ -197,24 +209,31 @@ const EditarPaciente = () => {
           />
         </div>
 
-        {/* --- Select Intolerancias --- */}
+        {/* --- Intolerancias tipo botones --- */}
         <div className="campo">
           <label>Dietas / Intolerancias</label>
-          <Select
-            closeMenuOnSelect={true}
-            components={animatedComponents}
-            isMulti
-            options={intoleranciasDisponibles}
-            value={intoleranciasDisponibles.filter((opt) =>
-              intoleranciasSeleccionadas.includes(opt.value)
-            )}
-            onChange={(selectedOptions) =>
-              setIntoleranciasSeleccionadas(
-                selectedOptions ? selectedOptions.map((o) => o.value) : []
-              )
-            }
-            placeholder="Seleccione intolerancias..."
-          />
+          <div className="intolerancias-botones">
+            {intoleranciasDisponibles.map((intolerancia) => (
+              <button
+                key={intolerancia.value}
+                type="button"
+                className={
+                  intoleranciasSeleccionadas.includes(intolerancia.value)
+                    ? "btn-intolerancia selected"
+                    : "btn-intolerancia"
+                }
+                onClick={() => {
+                  setIntoleranciasSeleccionadas((prev) =>
+                    prev.includes(intolerancia.value)
+                      ? prev.filter((id) => id !== intolerancia.value)
+                      : [...prev, intolerancia.value]
+                  );
+                }}
+              >
+                {intolerancia.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* --- Select Médicos --- */}
@@ -223,17 +242,16 @@ const EditarPaciente = () => {
           <Select
             closeMenuOnSelect={true}
             components={animatedComponents}
-            isMulti={false}
             options={medicosDisponibles}
             value={medicosDisponibles.find(
               (opt) => opt.value === Number(formData.idMedicoTratante)
             )}
-            onChange={(selectedOption) => {
+            onChange={(selectedOption) =>
               setFormData((prev) => ({
                 ...prev,
                 idMedicoTratante: selectedOption?.value || "",
-              }));
-            }}
+              }))
+            }
             placeholder="Seleccione el médico..."
           />
         </div>

@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { IonIcon } from '@ionic/react'; 
-import "./Recetas.css";
-import { FaRegTrashAlt } from "react-icons/fa";
 import { FaRegEdit } from "react-icons/fa";
-
-import { trashOutline } from 'ionicons/icons'; 
-<IonIcon icon={trashOutline} />
-
-
+import { GrStatusGood } from "react-icons/gr";
+import { RxCrossCircled } from "react-icons/rx";
+import "./Recetas.css";
 
 const VerReceta = () => {
   const [recetas, setRecetas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,7 +22,7 @@ const VerReceta = () => {
     fetch("http://localhost:3000/recetas", {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {
@@ -44,24 +38,37 @@ const VerReceta = () => {
         setLoading(false);
       });
   };
-  
 
-  // 🔴 Eliminar receta
-  const handleDelete = async (idReceta) => {
-    if (!window.confirm("¿Seguro que quieres eliminar esta receta?")) return;
+  // 🔄 Inactivar o activar receta
+  const handleToggleActivo = async (idReceta, activoActual) => {
+    const confirmMsg = activoActual
+      ? "¿Seguro que querés inactivar esta receta?"
+      : "¿Seguro que querés activar esta receta?";
+    if (!window.confirm(confirmMsg)) return;
 
     try {
       const token = sessionStorage.getItem("token");
-      const res = await fetch(`http://localhost:3000/recetas/${idReceta}`, {
-        method: "DELETE",
+      const receta = recetas.find((r) => r.idReceta === idReceta);
+      if (!receta) throw new Error("Receta no encontrada");
+
+      const recetaActualizada = { ...receta, Activo: !activoActual };
+
+      const res = await fetch(`http://localhost:3000/recetas/`, {
+        method: "PUT",
         headers: {
-          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
+        body: JSON.stringify(recetaActualizada),
       });
 
-      if (!res.ok) throw new Error("Error al eliminar la receta");
+      if (!res.ok) throw new Error("Error al actualizar receta");
 
-      setRecetas(recetas.filter((r) => r.idReceta !== idReceta));
+      setRecetas((prev) =>
+        prev.map((r) =>
+          r.idReceta === idReceta ? { ...r, Activo: !activoActual } : r
+        )
+      );
     } catch (err) {
       alert("Error: " + err.message);
     }
@@ -70,7 +77,7 @@ const VerReceta = () => {
   const handleEdit = (idReceta) => {
     navigate(`/dashboard/editarReceta/${idReceta}`);
   };
-  
+
   if (loading) return <p className="loading-text">Cargando recetas...</p>;
   if (error) return <p className="error-text">Error: {error}</p>;
 
@@ -94,12 +101,15 @@ const VerReceta = () => {
                 <th>Elaboración</th>
                 <th>Categoría</th>
                 <th>Foto</th>
-                <th>Acciones</th> {/* 🔵 Nueva columna */}
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               {recetas.map((r) => (
-                <tr key={r.idReceta} className="fila-receta">
+                <tr
+                  key={r.idReceta}
+                  className={`fila-receta ${!r.Activo ? "inactivo" : ""}`}
+                >
                   <td>{r.idReceta}</td>
                   <td>{r.Nombre}</td>
                   <td>{r.Descripcion}</td>
@@ -107,11 +117,7 @@ const VerReceta = () => {
                   <td>{r.idCategoria}</td>
                   <td>
                     {r.Foto ? (
-                      <img
-                        src={r.Foto}
-                        alt={r.Nombre}
-                        className="foto-receta"
-                      />
+                      <img src={r.Foto} alt={r.Nombre} className="foto-receta" />
                     ) : (
                       "Sin foto"
                     )}
@@ -119,17 +125,24 @@ const VerReceta = () => {
                   <td>
                     <div className="botones">
                       <button
-                      className="btn-editar"
-                      onClick={() => handleEdit(r.idReceta)}
-                    >
-                    <FaRegEdit />
-                    </button>
-                    <button
-                      className="btn-eliminar"
-                      onClick={() => handleDelete(r.idReceta)}
-                    >
-                    <FaRegTrashAlt />
-                    </button>
+                        className="btn-editar"
+                        onClick={() => handleEdit(r.idReceta)}
+                        disabled={!r.Activo}
+                      >
+                        <FaRegEdit />
+                      </button>
+                      <button
+                        className="btn-inactivar"
+                        onClick={() =>
+                          handleToggleActivo(r.idReceta, r.Activo)
+                        }
+                      >
+                        {r.Activo ? (
+                          <GrStatusGood color="green" size={20} />
+                        ) : (
+                          <RxCrossCircled color="red" size={20} />
+                        )}
+                      </button>
                     </div>
                   </td>
                 </tr>
