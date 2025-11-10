@@ -18,6 +18,7 @@ import Roles from './components/Roles';
 
 
 
+
 function App() {
       return (
     <BrowserRouter>
@@ -40,6 +41,8 @@ function App() {
           <Route path="agregarNovedades" element={<AgregarNovedades />} />
           <Route path="editarNovedades/:id" element={<EditarNovedades />} />
           <Route path="roles" element={<Roles />} />
+
+
 
 
 

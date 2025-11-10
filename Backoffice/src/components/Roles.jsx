@@ -21,7 +21,7 @@ const Roles = () => {
   const fetchMedicos = () => {
     const token = sessionStorage.getItem("token");
     setLoading(true);
-    fetch("http://localhost:3000/usuariosBack/medicos", {
+    fetch("http://localhost:3000/usuariosBack", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -54,24 +54,23 @@ const Roles = () => {
 
     try {
       const token = sessionStorage.getItem("token");
-      const medico = medicos.find((m) => m.id === id);
-      if (!medico) throw new Error("Médico no encontrado");
+      const nuevoEstado = !activoActual;
 
-      const medicoActualizado = { ...medico, activo: !activoActual };
-
+      // ✅ solo mandamos el campo activo
       const res = await fetch(`http://localhost:3000/usuariosBack/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(medicoActualizado),
+        body: JSON.stringify({ activo: nuevoEstado }),
       });
 
       if (!res.ok) throw new Error("Error al actualizar médico");
 
+      // ✅ Actualizamos el estado local del front
       setMedicos((prev) =>
-        prev.map((m) => (m.id === id ? { ...m, activo: !activoActual } : m))
+        prev.map((m) => (m.id === id ? { ...m, activo: nuevoEstado } : m))
       );
     } catch (err) {
       alert("Error: " + err.message);
