@@ -222,7 +222,7 @@ const AgregarPaciente = () => {
   onChange={(selectedOptions) => {
     setIntolerancias(selectedOptions ? selectedOptions.map(o => o.value) : []);
   }}
-  placeholder="Seleccione intolerancias..."
+  placeholder="Seleccione dietas..."
 />
 </div>
 

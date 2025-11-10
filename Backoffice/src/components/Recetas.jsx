@@ -15,28 +15,62 @@ const VerReceta = () => {
     fetchRecetas();
   }, []);
 
-  const fetchRecetas = () => {
+  const fetchRecetas = async () => {
     const token = sessionStorage.getItem("token");
-
     setLoading(true);
-    fetch("http://localhost:3000/recetas", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Error al traer las recetas");
-        return res.json();
-      })
-      .then((data) => {
-        setRecetas(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
+
+    try {
+      const res = await fetch("http://localhost:3000/recetas", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
+
+      if (!res.ok) throw new Error("Error al traer las recetas");
+      const data = await res.json();
+
+      // 🔹 Por cada receta, traigo sus intolerancias
+      const recetasConDietas = await Promise.all(
+        data.map(async (receta) => {
+          try {
+            const resInt = await fetch(
+              `http://localhost:3000/recetas/${receta.idReceta}/intolerancias`,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            if (resInt.ok) {
+              const intolerancias = await resInt.json();
+              return {
+                ...receta,
+                Dietas:
+                  intolerancias.map((i) => i.Nombre || i.nombre).join(", ") ||
+                  "Sin dietas",
+              };
+            } else {
+              return { ...receta, Dietas: "Sin dietas" };
+            }
+          } catch (error) {
+            console.error(
+              `Error al traer intolerancias para receta ${receta.idReceta}:`,
+              error
+            );
+            return { ...receta, Dietas: "Sin dietas" };
+          }
+        })
+      );
+
+      setRecetas(recetasConDietas);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // 🔄 Inactivar o activar receta
@@ -100,6 +134,7 @@ const VerReceta = () => {
                 <th>Descripción</th>
                 <th>Elaboración</th>
                 <th>Categoría</th>
+                <th>Dietas</th>
                 <th>Foto</th>
                 <th>Acciones</th>
               </tr>
@@ -115,9 +150,14 @@ const VerReceta = () => {
                   <td>{r.Descripcion}</td>
                   <td>{r.Elaboracion}</td>
                   <td>{r.idCategoria}</td>
+                  <td>{r.Dietas}</td>
                   <td>
                     {r.Foto ? (
-                      <img src={r.Foto} alt={r.Nombre} className="foto-receta" />
+                      <img
+                        src={r.Foto}
+                        alt={r.Nombre}
+                        className="foto-receta"
+                      />
                     ) : (
                       "Sin foto"
                     )}

@@ -121,7 +121,8 @@ const Pacientes = () => {
       </Link>
 
       {pacientes.length === 0 ? (
-        <p className="sin-pacientes-text">No hay pacientes disponibles</p>
+        <p className="sin-pacientes-text">No hay pacientes
+        </p>
       ) : (
         <div className="tabla-wrapper">
           <table className="tabla-pacientes">

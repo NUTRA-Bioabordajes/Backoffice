@@ -3,6 +3,7 @@ import './AgregarReceta.css';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
+import makeAnimated from "react-select/animated"; 
 
 const AgregarReceta = () => {
   const [formData, setFormData] = useState({
@@ -15,12 +16,15 @@ const AgregarReceta = () => {
 
   const [categoriasOptions, setCategoriasOptions] = useState([]);
   const [errors, setErrors] = useState({});
+  const [intoleranciasDisponibles, setIntoleranciasDisponibles] = useState([]);
+  const [intolerancias, setIntolerancias] = useState([]);
   const navigate = useNavigate();
+  
+  const animatedComponents = makeAnimated();
 
   // Cargar categorías
   useEffect(() => {
     const token = sessionStorage.getItem("token");
-
     axios
       .get("http://localhost:3000/recetas/categorias", {
         headers: { Authorization: `Bearer ${token}` },
@@ -28,12 +32,7 @@ const AgregarReceta = () => {
       .then((res) => {
         const options = res.data.map((c) => ({
           value: String(c.idCategoria),
-          label:
-            c.Nombre ||
-            c.nombre ||
-            c.NombreCategoria ||
-            c.nombreCategoria ||
-            `Categoría ${c.idCategoria}`,
+          label: c.Nombre || c.nombre || `Categoría ${c.idCategoria}`,
         }));
         setCategoriasOptions(options);
       })
@@ -43,16 +42,28 @@ const AgregarReceta = () => {
       });
   }, []);
 
-  // Manejar cambios en inputs y textarea
+  // Traer intolerancias
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    fetch("http://localhost:3000/intolerancias", {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        const opciones = data.map(i => ({
+          value: Number(i.idIntolerancias),
+          label: i.Nombre
+        }));
+        setIntoleranciasDisponibles(opciones);
+      })
+      .catch(err => console.error(err));
+  }, []);
+
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value
-    }));
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Manejar selección de categoría
   const handleCategoriaChange = (selectedOption) => {
     setFormData(prev => ({
       ...prev,
@@ -60,7 +71,6 @@ const AgregarReceta = () => {
     }));
   };
 
-  // Validación
   const validate = () => {
     const newErrors = {};
     if (!formData.Nombre) newErrors.Nombre = "El nombre es obligatorio";
@@ -70,7 +80,6 @@ const AgregarReceta = () => {
     return newErrors;
   };
 
-  // Enviar formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
@@ -78,24 +87,17 @@ const AgregarReceta = () => {
     if (Object.keys(validationErrors).length > 0) return;
 
     const token = sessionStorage.getItem("token");
+    const dataToSend = {
+      ...formData,
+      idCategoria: Number(formData.idCategoria),
+      intolerancias: intolerancias.map(id => Number(id)),
+      Favoritos: false
+    };
 
     try {
-      await axios.post(
-        "http://localhost:3000/recetas",
-        {
-          Nombre: formData.Nombre,
-          Descripcion: formData.Descripcion,
-          Elaboracion: formData.Elaboracion,
-          idCategoria: Number(formData.idCategoria),
-          Foto: formData.Foto || null,
-          Favoritos: false
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      );
-
-      // Alert al estilo de EditarPaciente
+      await axios.post("http://localhost:3000/recetas", dataToSend, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       alert("Receta creada con éxito ✅");
       navigate("/dashboard/recetas");
     } catch (err) {
@@ -162,6 +164,21 @@ const AgregarReceta = () => {
             classNamePrefix="select"
           />
           {errors.idCategoria && <p className="error">{errors.idCategoria}</p>}
+        </div>
+
+        <div className="campo">
+          <label>Dietas</label>
+          <Select
+            closeMenuOnSelect={true}
+            components={animatedComponents}
+            isMulti
+            options={intoleranciasDisponibles}
+            value={intoleranciasDisponibles.filter(opt => intolerancias.includes(opt.value))}
+            onChange={(selectedOptions) => {
+              setIntolerancias(selectedOptions ? selectedOptions.map(o => o.value) : []);
+            }}
+            placeholder="Seleccione dietas..."
+          />
         </div>
 
         <div className="campo">
