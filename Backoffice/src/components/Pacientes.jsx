@@ -32,9 +32,10 @@ const Pacientes = () => {
         return;
       }
 
-      let url = "http://localhost:3000/usuarios"; // admin
+      // Seleccionar la ruta según el rol
+      let url = "http://localhost:3000/usuarios";
       if (especialidad.toLowerCase() === "medico") {
-        url = "http://localhost:3000/usuarios/porMedico"; // pacientes del médico
+        url = "http://localhost:3000/usuarios/porMedico";
       } else if (especialidad.toLowerCase() === "diseñador") {
         setError("No estás autorizado en esta sección.");
         setPacientes([]);
@@ -59,8 +60,11 @@ const Pacientes = () => {
       if (!res.ok) throw new Error("Error al traer los pacientes");
 
       const data = await res.json();
+
+      // YA NO buscamos intolerancias por separado
       setPacientes(data);
       setLoading(false);
+
     } catch (err) {
       setError(err.message);
       setLoading(false);
@@ -71,6 +75,7 @@ const Pacientes = () => {
     const confirmMsg = activoActual
       ? "¿Seguro que quieres desactivar este paciente?"
       : "¿Seguro que quieres activar este paciente?";
+
     if (!window.confirm(confirmMsg)) return;
 
     try {
@@ -95,7 +100,6 @@ const Pacientes = () => {
         throw new Error(`Error al actualizar paciente: ${errorText}`);
       }
 
-      // Actualiza localmente el estado
       setPacientes((prev) =>
         prev.map((p) => (p.id === id ? pacienteActualizado : p))
       );
@@ -115,14 +119,12 @@ const Pacientes = () => {
     <div className="pacientes-container">
       <h1 className="titulo">Pacientes</h1>
 
-      {/* ✅ Botón agregar paciente */}
       <Link to="/dashboard/agregarPaciente" className="agregar-paciente-link">
         + Agregar Paciente
       </Link>
 
       {pacientes.length === 0 ? (
-        <p className="sin-pacientes-text">No hay pacientes
-        </p>
+        <p className="sin-pacientes-text">No hay pacientes</p>
       ) : (
         <div className="tabla-wrapper">
           <table className="tabla-pacientes">
@@ -136,17 +138,17 @@ const Pacientes = () => {
                 <th>Sexo</th>
                 <th>Barrio</th>
                 <th>ID Médico</th>
+                <th>Dieta</th>
                 <th>Foto</th>
                 <th>Acciones</th>
               </tr>
             </thead>
+
             <tbody>
               {pacientes.map((p) => (
                 <tr
                   key={p.id}
-                  className={`fila-paciente ${
-                    p.activo === false ? "inactivo" : ""
-                  }`}
+                  className={p.activo === false ? "fila-paciente inactivo" : "fila-paciente"}
                 >
                   <td>{p.id}</td>
                   <td>{p.dni}</td>
@@ -156,6 +158,13 @@ const Pacientes = () => {
                   <td>{p.sexo}</td>
                   <td>{p.barrio}</td>
                   <td>{p.idMedico}</td>
+
+                  <td>
+                    {p.intolerancias?.length > 0
+                      ? p.intolerancias.join(", ")
+                      : "—"}
+                  </td>
+
                   <td>
                     {p.foto ? (
                       <img
@@ -167,6 +176,7 @@ const Pacientes = () => {
                       "Sin foto"
                     )}
                   </td>
+
                   <td>
                     <div className="botones">
                       <button
@@ -176,21 +186,24 @@ const Pacientes = () => {
                       >
                         <FaRegEdit />
                       </button>
+
                       <button
-                      className="btn-eliminar"
-                      onClick={() => handleToggleActivo(p.id, p.activo)}
-                    >
-                      {p.activo ? (
-                        <GrStatusGood color="green" size={20} />
-                      ) : (
-                        <RxCrossCircled color="red" size={20} />
-                      )}
-                    </button>
+                        className="btn-eliminar"
+                        onClick={() => handleToggleActivo(p.id, p.activo)}
+                      >
+                        {p.activo ? (
+                          <GrStatusGood size={20} />
+                        ) : (
+                          <RxCrossCircled size={20} />
+                        )}
+                      </button>
                     </div>
                   </td>
+
                 </tr>
               ))}
             </tbody>
+
           </table>
         </div>
       )}

@@ -1,3 +1,4 @@
+// EditarPaciente.jsx integrado con la sincronización de intolerancias
 import React, { useState, useEffect } from "react";
 import "./EditarPaciente.css";
 import { useParams, useNavigate } from "react-router-dom";
@@ -27,7 +28,7 @@ const EditarPaciente = () => {
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
 
-  // 🔹 Obtener datos del paciente
+  // Obtener datos del paciente
   useEffect(() => {
     const token = sessionStorage.getItem("token");
 
@@ -60,7 +61,7 @@ const EditarPaciente = () => {
     fetchPaciente();
   }, [idPaciente]);
 
-  // 🔹 Obtener intolerancias disponibles
+  // Obtener intolerancias disponibles
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     fetch("http://localhost:3000/intolerancias", {
@@ -77,7 +78,7 @@ const EditarPaciente = () => {
       .catch((err) => console.error("Error cargando intolerancias:", err));
   }, []);
 
-  // 🔹 Obtener intolerancias del paciente
+  // Obtener intolerancias del paciente (solo IDs)
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     fetch(`http://localhost:3000/usuarios/${idPaciente}/intolerancias`, {
@@ -93,7 +94,18 @@ const EditarPaciente = () => {
       );
   }, [idPaciente]);
 
-  // 🔹 Obtener médicos disponibles
+  // 🔥 Sincroniza intolerancias cuando llegan las disponibles
+  useEffect(() => {
+    if (intoleranciasDisponibles.length > 0 && intoleranciasSeleccionadas.length > 0) {
+      const validados = intoleranciasDisponibles
+        .filter((opt) => intoleranciasSeleccionadas.includes(opt.value))
+        .map((opt) => opt.value);
+
+      setIntoleranciasSeleccionadas(validados);
+    }
+  }, [intoleranciasDisponibles]);
+
+  // Obtener médicos disponibles
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     fetch("http://localhost:3000/usuariosBack/medicos", {
@@ -110,7 +122,7 @@ const EditarPaciente = () => {
       .catch((err) => console.error("Error cargando médicos:", err));
   }, []);
 
-  // 🔹 Control de carga
+  // Control de carga
   useEffect(() => {
     if (
       formData.nombre !== "" &&
@@ -121,7 +133,6 @@ const EditarPaciente = () => {
     }
   }, [formData, medicosDisponibles, intoleranciasDisponibles]);
 
-  // 🔹 Manejadores
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -164,7 +175,6 @@ const EditarPaciente = () => {
       <h1>Editar paciente</h1>
 
       <form onSubmit={handleSubmit}>
-        {/* Campos básicos */}
         <div className="campo">
           <label>Nombre</label>
           <input
@@ -209,7 +219,7 @@ const EditarPaciente = () => {
           />
         </div>
 
-        {/* --- Intolerancias tipo botones --- */}
+        {/* Botones de intolerancias */}
         <div className="campo">
           <label>Dietas / Intolerancias</label>
           <div className="intolerancias-botones">
@@ -234,9 +244,10 @@ const EditarPaciente = () => {
               </button>
             ))}
           </div>
-        </div>
+          </div>
 
-        {/* --- Select Médicos --- */}
+
+        {/* Médico tratante */}
         <div className="campo">
           <label>Médico tratante</label>
           <Select
