@@ -137,7 +137,6 @@ const Pacientes = () => {
                 <th>Diagnóstico</th>
                 <th>Sexo</th>
                 <th>Barrio</th>
-                <th>ID Médico</th>
                 <th>Dieta</th>
                 <th>Foto</th>
                 <th>Acciones</th>
@@ -157,8 +156,6 @@ const Pacientes = () => {
                   <td>{p.diagnostico}</td>
                   <td>{p.sexo}</td>
                   <td>{p.barrio}</td>
-                  <td>{p.idMedico}</td>
-
                   <td>
                     {p.intolerancias?.length > 0
                       ? p.intolerancias.join(", ")

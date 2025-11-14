@@ -3,14 +3,14 @@
     max-width: 500px;
     margin: 3rem auto;
     padding: 2rem;
-    background-color: #fff;
+    background-color: #FCF9F2;
     border-radius: 14px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     text-align: center;
   }
   
   .register-container h2 {
-    color: #4c1d95;
+    color: #b5838d;
     margin-bottom: 2rem;
     font-size: 1.8rem;
     font-weight: 700;
@@ -44,19 +44,19 @@
   
   .register-form input:focus,
   .register-form select:focus {
-    border-color: #8b5cf6; /* solo al foco */
+    border-color: #b5838d; /* solo al foco */
     background-color: #fff;
     box-shadow: 0 0 4px rgba(139, 92, 246, 0.3);
   }
   
   .register-form select {
-    color: #555;
+    color: #b5838d;
   }
   
   /* === BOTÓN === */
   .register-form button {
     width: 85%;
-    background-color: #8b5cf6;
+    background-color: #b5838d;
     color: #fff;
     font-weight: 600;
     font-size: 15px;
@@ -68,10 +68,16 @@
   }
   
   .register-form button:hover {
-    background-color: #6d28d9;
+    background-color: #b5838d;
     transform: scale(1.02);
   }
-  
+  .volver-login {
+    color: #b5838d;       /* mismo violeta que botones */
+    font-weight: 600;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s ease,
+  }  
   /* === MENSAJES === */
   .error-message {
     color: #ef4444;

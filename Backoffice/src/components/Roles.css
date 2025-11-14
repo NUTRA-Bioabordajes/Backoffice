@@ -1,104 +1,24 @@
-/* Contenedor principal */
 .roles-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  border-radius: 2%;
-  font-family: Arial, sans-serif;
-  background-color: #fcf9f3;
-  color: #333;
-  min-height: 60vh;
-  max-width: 95%;
-  margin: 0 auto;
-  padding: 10px;
-}
-
-/* Título */
-.titulo-roles {
-  font-weight: 600;
-  font-size: 1.8rem;
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-/* Tabla con scroll */
-.tabla-wrapper-roles {
-  max-height: 60vh;
-  overflow-y: auto;
-  overflow-x: auto;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  justify-content: center; 
+  padding: 2%;
+  background-color: #fffaf3;
   color: #000;
-  width: 100%;
-  margin-top: 10px;
+  height: 70vh;            /* MISMO ALTO QUE RECETAS */
+  overflow-y: auto;        /* SCROLL INTERNO */
+  border-radius: 3%;
+  width: 100vh;
 }
 
-/* Tabla */
-.tabla-roles {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  font-size: 0.9rem;
-  table-layout: fixed;
+.titulo {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #000;
+  background-color: #fffaf3 ;
 }
 
-/* Encabezado */
-.tabla-roles thead tr {
-  background-color: #f5f0e7;
-  font-weight: 700;
-  font-size: 0.85rem;
-  color: #333;
-  text-align: left;
-}
-
-/* Celdas */
-.tabla-roles th,
-.tabla-roles td {
-  padding: 8px 10px;
-  border-bottom: 1px solid #e3ded3;
-  text-align: left;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-/* Filas alternadas */
-.tabla-roles tbody tr:nth-child(even) {
-  background-color: #fdf9f3;
-}
-
-/* Hover fila */
-.tabla-roles tbody tr:hover {
-  background-color: #f1ede7;
-  transition: background-color 0.2s ease;
-}
-
-/* Botones */
-.btn-editar,
-.btn-eliminar {
-  background-color: #fcf9f3;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 10px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.btn-editar:hover,
-.btn-eliminar:hover {
-  background-color: #f1ede7;
-}
-
-.btn-editar svg,
-.btn-eliminar svg {
-  width: 18px;
-  height: 18px;
-  color: #333;
-}
-
-/* Link agregar */
 .agregar-rol-link {
   display: inline-block;
   margin-bottom: 15px;
@@ -113,47 +33,67 @@
 
 .agregar-rol-link:hover {
   background-color: #cfa49e;
-  color: #f2f2f2;
+  color: white;
 }
 
-/* Fila inactiva */
-.fila-rol.inactivo {
+/* WRAPPER SCROLL (MISMO QUE RECETAS) */
+.tabla-wrapper {
+  max-height: 75%;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  color: #000;
+}
+
+/* TABLA */
+.tabla-roles {
+  width: 100%;
+  border-collapse: collapse;
+  color: #000;
+}
+
+.tabla-roles th,
+.tabla-roles td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 14px;
+  color: #000;
+}
+
+.tabla-roles th {
+  background-color: #fffaf3;
+  font-weight: bold;
+}
+
+.fila-medico:hover {
+  background-color: #fdf9f3;
+}
+
+/* FILA INACTIVA */
+.fila-medico.inactivo {
   background-color: #f8d7da !important;
   color: #721c24 !important;
 }
 
-.fila-rol.inactivo:hover {
-  background-color: #f8d7da !important;
-  color: #721c24 !important;
-  cursor: default;
+.btn-editar,
+.btn-inactivar {
+  background-color: #fcf9f3;
+  border: none;
+  cursor: pointer;
 }
 
-/* Mensajes */
-.loading-text,
-.error-text,
-.sin-roles-text {
-  font-weight: 500;
-  margin-top: 10px;
-  font-size: 1rem;
-  text-align: center;
+.botones {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .tabla-roles {
-    font-size: 0.8rem;
-  }
-  .titulo-roles {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .tabla-roles th,
-  .tabla-roles td {
-    padding: 6px 8px;
-  }
-  .titulo-roles {
-    font-size: 1.2rem;
-  }
+.btn-editar svg,
+.btn-inactivar svg {
+  width: fit-content;
+  height: fit-content;
+  color: #333;
 }

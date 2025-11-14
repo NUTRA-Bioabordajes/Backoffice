@@ -106,7 +106,7 @@ const Novedades = () => {
       {novedades.length === 0 ? (
         <p className="sin-novedades-text">No hay novedades registradas</p>
       ) : (
-        <div className="tabla-wrapper-novedades"> {/* <-- Scroll solo aquí */}
+        <div className="novedades-table-wrapper">
           <table className="tabla-novedades">
             <thead>
               <tr>

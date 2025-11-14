@@ -124,13 +124,14 @@ const Roles = () => {
                 <td>
                   {esAdmin && (
                     <div className="botones">
+                    {/*
                       <button
                         className="btn-editar"
                         onClick={() => handleEdit(m.id)}
                         disabled={!m.activo}
                       >
                         <FaRegEdit />
-                      </button>
+                  </button>*/}
                       <button
                         className="btn-inactivar"
                         onClick={() => handleToggleActivo(m.id, m.activo)}

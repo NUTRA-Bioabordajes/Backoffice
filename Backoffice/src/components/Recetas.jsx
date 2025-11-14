@@ -183,6 +183,7 @@ const VerReceta = () => {
                           <RxCrossCircled color="red" size={20} />
                         )}
                       </button>
+                      
                     </div>
                   </td>
                 </tr>

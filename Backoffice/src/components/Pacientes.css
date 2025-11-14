@@ -4,26 +4,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  border-radius: 2%;
+  border-radius: 1rem;
   font-family: Arial, sans-serif;
   background-color: #fcf9f3;
   color: #333;
-  padding: 3%;
+  padding: 2%;
   min-height: 75vh;
-  width: 100%;
+  width: 95%;
+  margin: 5% auto; 
   box-sizing: border-box;
-  width: 100vh;
+  margin-top: 20%;
 }
-
-/* === TÍTULO === */
-.titulo {
-  font-weight: 600;
-  margin-bottom: 2%;
-  font-size: clamp(1.2rem, 2vw, 1.8rem);
-  text-align: center;
-}
-
-/* === TEXTOS AUXILIARES === */
+/* === MENSAJES AUXILIARES === */
 .loading-text,
 .error-text,
 .sin-pacientes-text {
@@ -33,63 +25,10 @@
   text-align: center;
 }
 
-/* === TABLA === */
-.tabla-wrapper {
-  max-height: 70vh;
-  width: 95%;
-  overflow-y: auto;
-  overflow-x: auto;
-  border: 0.1rem solid #ddd;
-  border-radius: 1rem;
-  box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.1);
-  color: #000;
-  background-color: #fff;
-  margin-top: 2%;
-}
-
-.tabla-pacientes {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
-  border-radius: 1rem;
-  overflow: hidden;
-}
-
-.tabla-pacientes thead tr {
-  background-color: #f5f0e7;
-  font-weight: 700;
-  color: #333;
-  text-align: left;
-}
-
-.tabla-pacientes th,
-.tabla-pacientes td {
-  padding: 1rem 1.5rem;
-  border-bottom: 0.1rem solid #e3ded3;
-  word-wrap: break-word;
-}
-
-.tabla-pacientes tbody tr:nth-child(even) {
-  background-color: #fdf9f3;
-}
-
-.tabla-pacientes tbody tr:hover {
-  background-color: #f1ede7;
-  transition: background-color 0.2s ease;
-}
-
-/* === FOTO PACIENTE === */
-.foto-paciente {
-  width: clamp(2rem, 5vw, 4rem);
-  height: clamp(2rem, 5vw, 4rem);
-  border-radius: 50%;
-  object-fit: cover;
-}
-
 /* === BOTÓN AGREGAR === */
 .agregar-paciente-link {
   display: inline-block;
-  margin-bottom: 2%;
+  margin-bottom: 1.5rem;
   padding: 0.8rem 1.5rem;
   background-color: #e0cac7;
   color: white;
@@ -103,6 +42,109 @@
 .agregar-paciente-link:hover {
   background-color: #cfa49e;
   color: #f2f2f2;
+}
+
+/* === TABLA CON SCROLL === */
+.tabla-wrapper {
+  width: 100%;
+  max-height: 65vh; /* altura máxima */
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 0.1rem solid #ddd;
+  border-radius: 1rem;
+  box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  margin-top: 1rem;
+}
+
+/* TABLA */
+.tabla-pacientes {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+}
+
+/* CABECERA FIJA */
+.tabla-pacientes thead th {
+  position: sticky;
+  top: 0;
+  background-color: #f5f0e7;
+  font-weight: 700;
+  color: #333;
+  text-align: left;
+  padding: 1rem 1.5rem;
+  z-index: 2;
+}
+
+/* CELDAS */
+.tabla-pacientes th,
+.tabla-pacientes td {
+  padding: 1rem 1.5rem;
+  border-bottom: 0.1rem solid #e3ded3;
+  word-wrap: break-word;
+}
+
+/* FILAS */
+.tabla-pacientes tbody tr:nth-child(even) {
+  background-color: #fdf9f3;
+}
+
+.tabla-pacientes tbody tr:hover {
+  background-color: #f1ede7;
+  transition: background-color 0.2s ease;
+}
+
+/* FOTO PACIENTE */
+.foto-paciente {
+  width: clamp(2rem, 5vw, 4rem);
+  height: clamp(2rem, 5vw, 4rem);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* BOTONES DE ACCIÓN */
+.botones {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-editar,
+.btn-eliminar {
+  background-color: #fcf9f3;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-editar:hover {
+  background-color: #ddd6fe;
+}
+
+.btn-eliminar:hover {
+  background-color: #fecaca;
+}
+
+.btn-editar svg,
+.btn-eliminar svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #333;
+}
+
+/* FILAS INACTIVAS */
+.fila-paciente.inactivo {
+  background-color: #f8d7da !important;
+  color: #721c24 !important;
+}
+
+.fila-paciente.inactivo:hover {
+  background-color: #f8d7da !important;
+  color: #721c24 !important;
+  cursor: default;
 }
 
 /* === FORMULARIO === */
@@ -161,7 +203,7 @@
   margin-top: 0.3rem;
 }
 
-/* === BOTÓN ENVIAR === */
+/* BOTÓN ENVIAR */
 .boton-enviar {
   display: block;
   width: 100%;
@@ -186,52 +228,7 @@
   cursor: not-allowed;
 }
 
-/* === BOTONES DE ACCIÓN === */
-.botones {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.btn-editar,
-.btn-eliminar {
-  background-color: #fcf9f3;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.btn-editar:hover {
-  background-color: #ddd6fe;
-}
-
-.btn-eliminar:hover {
-  background-color: #fecaca;
-}
-
-.btn-editar svg,
-.btn-eliminar svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: #333;
-}
-
-/* === FILAS INACTIVAS === */
-.fila-paciente.inactivo {
-  background-color: #f8d7da !important;
-  color: #721c24 !important;
-}
-
-.fila-paciente.inactivo:hover {
-  background-color: #f8d7da !important;
-  color: #721c24 !important;
-  cursor: default;
-}
-
-/* === RESPONSIVE GLOBAL === */
+/* === RESPONSIVE === */
 @media (max-width: 768px) {
   .tabla-wrapper {
     width: 100%;
