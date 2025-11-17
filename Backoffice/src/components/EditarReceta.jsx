@@ -123,7 +123,7 @@ const EditarReceta = () => {
           onChange={handleChange}
         />
 
-        {/* 🆕 Selector múltiple de dietas */}
+        
         <label>Dietas asociadas:</label>
         <Select
           closeMenuOnSelect={true}
@@ -140,8 +140,8 @@ const EditarReceta = () => {
           }}
           placeholder="Seleccione dietas..."
         />
-
-        {/* 🆕 Mostrar dietas actuales */}
+       
+        
         {receta.dietas && receta.dietas.length > 0 && (
           <div className="dietas-actuales">
             <p><strong>Intolerancias/Dietas actuales:</strong></p>
@@ -151,7 +151,7 @@ const EditarReceta = () => {
               ))}
             </ul>
           </div>
-        )}
+        )} 
 
         <div className="editar-receta-actions">
           <button type="submit" className="btn-guardar">
